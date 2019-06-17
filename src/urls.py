@@ -17,8 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from src.apps.core import views
 
+BASE_VERSION = 'v1/'
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-    path('auth/', include('rest_framework.urls'))
+    path('auth/', include('rest_framework.urls')),
+    path(f'{BASE_VERSION}users/',
+         include(('src.apps.user.api.urls', 'user'), namespace='user')),
 ]
