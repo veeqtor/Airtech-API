@@ -12,6 +12,8 @@ django = "*"
 djangorestframework = "*"
 psycopg2-binary = "*"
 django-cors-headers = "*"
+pytest-django = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.7"
