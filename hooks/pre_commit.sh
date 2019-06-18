@@ -50,7 +50,10 @@ if [ ${#CHANGED_FILES[@]} -gt 0 ]; then
   echo 'You have unstaged changes to some files in your commit; skipping '
   echo 'auto-format. Please stage, stash, or revert these changes. You may '
   echo 'find `git stash -k` helpful here.'
-  echo 'Files with unstaged changes:' "${CHANGED_FILES[@]}"
+  echo 'Files with unstaged changes:'
+  for file in ${CHANGED_FILES[@]}; do
+    echo "$file"
+  done
   exit 1
 fi
 
@@ -69,7 +72,16 @@ while IFS=$'\n' read -r line; do CHANGED_FILES+=("$line"); done \
   < <(git diff --name-only "${PYTHON_FILES[@]}")
 if [ ${#CHANGED_FILES[@]} -gt 0 ]; then
   echo 'Reformatted staged files. Please review and stage the changes.'
-  echo 'Files updated: ' "${CHANGED_FILES[@]}"
+  echo 'Files updated:'
+  for file in ${CHANGED_FILES[@]}; do
+    echo "$file"
+  done
+
+  echo 'Checking autoformatted files for residual linting errors . . .'
+
+  for file in ${CHANGED_FILES[@]}; do
+    flake8 $file
+  done
   exit 1
 else
   exit 0

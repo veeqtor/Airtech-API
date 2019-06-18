@@ -46,8 +46,12 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Apps
-    'src.apps.core.apps.CoreConfig'
+    'src.apps.core.apps.CoreConfig',
+    'src.apps.user.apps.UserConfig'
 ]
+
+# Custom user model
+AUTH_USER_MODEL = 'user.user'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -138,5 +142,32 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES':
-    ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly']
+    ('rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly', ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES':
+    ('djangorestframework_camel_case.render.CamelCaseJSONRenderer', ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseFormParser',
+        'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    ),
+}
+
+# JWT settings
+JWT_AUTH = {
+    'JWT_AUTH_HEADER_PREFIX':
+    'Bearer',
+    'JWT_ISSUER':
+    'Airtech',
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'src.apps.core.utilities.jwt_handlers.jwt_response_payload_handler',
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER':
+    'src.apps.core.utilities.jwt_handlers'
+    '.jwt_get_username_from_payload_handler',
+    'JWT_PAYLOAD_HANDLER':
+    'src.apps.core.utilities.jwt_handlers.jwt_payload_handler',
 }
