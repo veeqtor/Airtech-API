@@ -11,5 +11,7 @@ ERRORS = {
     'one special character.',
     'USR_O3': 'There is a problem with the provided credentials.',
     'USR_04': 'This field is required.',
-    'USR_05': 'user with this Email already exists.'
+    'USR_05': 'user with this Email already exists.',
+    'USR_06': 'Could not authenticated with the provided credentials',
+    'USR_07': 'This field may not be blank.'
 }

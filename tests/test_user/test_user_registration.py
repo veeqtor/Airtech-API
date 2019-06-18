@@ -2,8 +2,8 @@
 
 import pytest
 from django.urls import resolve, reverse
-from tests.fixtures.user import USER
-from src.apps.core.utilities.messages import ERRORS
+from tests.fixtures.user import USER, USER_INVALID
+from src.apps.core.utilities.messages import ERRORS, MESSAGES
 
 REGISTER_URL = reverse('user:register')
 
@@ -24,6 +24,7 @@ class TestUserRegistration:
 
         assert response.status_code == 201
         assert resp_data['status'] == 'success'
+        assert resp_data['user_message'] == MESSAGES['REGISTER']
         assert resp_data['data']['token'] is not None
 
     def test_user_duplicate_account_registration_false(self, client,
@@ -51,6 +52,17 @@ class TestUserRegistration:
         assert resp_data['user_message'] == ERRORS['USR_O3']
         assert errors['email'][0] == ERRORS['USR_04']
         assert errors['password'][0] == ERRORS['USR_04']
+
+    def test_user_registration_with_blank_fields_fails(self, client):
+        """Test that a user cannot login with blank variables"""
+
+        response = client.post(REGISTER_URL, data=USER_INVALID)
+        resp_data = response.data
+        errors = resp_data['errors']
+        assert response.status_code == 400
+        assert resp_data['user_message'] == ERRORS['USR_O3']
+        assert errors['email'][0] == ERRORS['USR_07']
+        assert errors['password'][0] == ERRORS['USR_07']
 
     def test_user_account_registration_with_invalid_data_fails(self, client):
         """Test that users cannot register without invalid data"""

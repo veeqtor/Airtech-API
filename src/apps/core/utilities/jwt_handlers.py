@@ -6,16 +6,6 @@ from rest_framework_jwt.settings import api_settings
 from src.apps.core.utilities.response_utils import ResponseHandler
 
 
-def jwt_get_username_from_payload_handler(payload):
-    """Overriding the get user from payload method
-    Args:
-        payload (dict): Jwt payload
-    Returns:
-        String: Email from the payload.
-    """
-    return payload.get('email')
-
-
 def jwt_payload_handler(user):
     """JWT payload handler"""
 
@@ -24,9 +14,6 @@ def jwt_payload_handler(user):
         'email': user.get('email'),
         'exp': datetime.utcnow() + api_settings.JWT_EXPIRATION_DELTA
     }
-
-    if api_settings.JWT_AUDIENCE is not None:
-        payload['aud'] = api_settings.JWT_AUDIENCE
 
     if api_settings.JWT_ISSUER is not None:
         payload['iss'] = api_settings.JWT_ISSUER

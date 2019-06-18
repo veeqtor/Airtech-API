@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import datetime
 from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -155,19 +156,17 @@ REST_FRAMEWORK = {
         'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     ),
+    'NON_FIELD_ERRORS_KEY':
+    'error'
 }
 
 # JWT settings
 JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX':
-    'Bearer',
-    'JWT_ISSUER':
-    'Airtech',
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_ISSUER': 'Airtech',
     'JWT_RESPONSE_PAYLOAD_HANDLER':
     'src.apps.core.utilities.jwt_handlers.jwt_response_payload_handler',
-    'JWT_PAYLOAD_GET_USERNAME_HANDLER':
-    'src.apps.core.utilities.jwt_handlers'
-    '.jwt_get_username_from_payload_handler',
     'JWT_PAYLOAD_HANDLER':
     'src.apps.core.utilities.jwt_handlers.jwt_payload_handler',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=24),
 }

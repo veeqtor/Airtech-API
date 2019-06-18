@@ -1,9 +1,16 @@
 """User Serializer"""
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
+from rest_framework_jwt.serializers import JSONWebTokenSerializer
+
 from src.apps.core.utilities.validations import (password_validation,
                                                  email_validation)
+from src.apps.core.utilities.messages import ERRORS
+from rest_framework_jwt.settings import api_settings
+
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,3 +63,42 @@ class UserSerializer(serializers.ModelSerializer):
     #         user.set_password(password)
     #         user.save()
     #     return user
+
+
+class AuthTokenSerializer(JSONWebTokenSerializer):
+    """Class representing the JWT Token Payload serializer"""
+
+    def validate_password(self, attrs) -> str:
+        """Validates the password"""
+
+        password_validation(attrs)
+        return attrs
+
+    def validate_email(self, attrs) -> str:
+        """Validates the password"""
+
+        email_validation(attrs)
+        return attrs
+
+    def validate(self, attrs) -> dict:
+        """Validate and authenticate the user"""
+
+        request = self.context.get('request')
+
+        credentials = {
+            'username': attrs.get('email'),
+            'password': attrs.get('password')
+        }
+
+        user = authenticate(request=request, **credentials)
+
+        if user is not None and user.is_active:
+            serializer = UserSerializer(user)
+            payload = jwt_payload_handler(serializer.data)
+
+            return {
+                'token': jwt_encode_handler(payload),
+            }
+        else:
+            raise serializers.ValidationError(ERRORS['USR_06'],
+                                              code='authentication')
