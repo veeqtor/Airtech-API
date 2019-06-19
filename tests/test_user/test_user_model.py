@@ -14,8 +14,8 @@ class TestUserModel:
 
         user = create_user(USER)
         assert user.email == USER['email']
-        assert user.display_name == f'{user.first_name} {user.last_name}'
         assert user.check_password(USER['password'])
+        assert str(user) == user.email
 
     def test_super_user_creation(self, create_superuser):
         """Test that a super user is created"""

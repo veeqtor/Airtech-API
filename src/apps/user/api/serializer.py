@@ -20,13 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
         """Meta class"""
 
         model = get_user_model()
-        fields = [
-            'id', 'email', 'password', 'last_name', 'first_name', 'is_staff',
-            'is_superuser'
-        ]
-        read_only_fields = [
-            'display_name', 'id', 'date_joined', 'is_staff', 'is_superuser'
-        ]
+        fields = ['id', 'email', 'password', 'is_staff', 'is_superuser']
+        read_only_fields = ['id', 'date_joined', 'is_staff', 'is_superuser']
         extra_kwargs = {
             'verification_token': {
                 'write_only': True

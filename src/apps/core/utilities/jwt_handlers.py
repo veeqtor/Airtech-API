@@ -25,3 +25,14 @@ def jwt_response_payload_handler(token, user=None, request=None):
     """Returns the response data for both the login and refresh views."""
 
     return ResponseHandler.response({'token': token}, key='LOGIN')
+
+
+def jwt_get_username_from_payload_handler(payload):
+    """Overriding the get user from payload method
+    Args:
+        payload (dict): Jwt payload
+    Returns:
+        String: Email from the payload.
+    """
+
+    return payload.get('email', None)
