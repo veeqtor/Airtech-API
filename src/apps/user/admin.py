@@ -13,8 +13,7 @@ class UserAdmin(BaseUserAdmin):
 
     ordering = ['id']
     list_display = [
-        'email', 'display_name', 'gender', 'is_verified', 'date_joined',
-        'is_staff', 'is_superuser'
+        'email', 'is_verified', 'date_joined', 'is_staff', 'is_superuser'
     ]
     list_per_page = 25
     list_filter = ('is_staff', 'is_active')
@@ -22,11 +21,7 @@ class UserAdmin(BaseUserAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('email', 'password', 'gender', 'is_verified')
-        }),
-        (_('Personal info'), {
-            'fields': ('first_name', 'middle_name', 'last_name', 'dob',
-                       'seat_preference')
+            'fields': ('email', 'password', 'is_verified')
         }),
         (_('Permissions'), {
             'fields': (

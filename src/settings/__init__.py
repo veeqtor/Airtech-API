@@ -48,7 +48,8 @@ INSTALLED_APPS = [
 
     # Apps
     'src.apps.core.apps.CoreConfig',
-    'src.apps.user.apps.UserConfig'
+    'src.apps.user.apps.UserConfig',
+    'src.apps.user_profile.apps.UserProfileConfig',
 ]
 
 # Custom user model
@@ -149,6 +150,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'EXCEPTION_HANDLER':
+    'src.apps.core.utilities.custom_exception_handler.custom_exception_handler',
     'DEFAULT_RENDERER_CLASSES':
     ('djangorestframework_camel_case.render.CamelCaseJSONRenderer', ),
     'DEFAULT_PARSER_CLASSES': (
@@ -162,11 +165,17 @@ REST_FRAMEWORK = {
 
 # JWT settings
 JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_ISSUER': 'Airtech',
+    'JWT_AUTH_HEADER_PREFIX':
+    'Bearer',
+    'JWT_ISSUER':
+    'Airtech',
     'JWT_RESPONSE_PAYLOAD_HANDLER':
     'src.apps.core.utilities.jwt_handlers.jwt_response_payload_handler',
     'JWT_PAYLOAD_HANDLER':
     'src.apps.core.utilities.jwt_handlers.jwt_payload_handler',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=24),
+    'JWT_EXPIRATION_DELTA':
+    datetime.timedelta(hours=24),
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER':
+    'src.apps.core.utilities.jwt_handlers.'
+    'jwt_get_username_from_payload_handler',
 }
