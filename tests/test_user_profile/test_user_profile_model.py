@@ -13,7 +13,7 @@ class TestUserProfileModel:
     """
 
     def test_the_model_string_succeeds(self, create_profile):
-        """Test that vendors model string rep is correct."""
+        """Test that profile model string rep is correct."""
 
         profile = create_profile
         assert profile.__str__() == profile.display_name

@@ -2,13 +2,15 @@
 
 import pytest
 from django.contrib.auth import get_user_model
+from rest_framework_jwt.settings import api_settings
 
 from src.apps.user_profile.models import Passport
+from src.apps.flight.models import Plane, Seats
 from src.apps.user.api.serializer import UserSerializer
 from tests.fixtures.user import USER
 from tests.fixtures.user_profile import NEW_PROFILE
 from tests.fixtures.passport import NEW_PASSPORT
-from rest_framework_jwt.settings import api_settings
+from tests.fixtures.plane import NEW_PLANE, SEATS
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -95,26 +97,33 @@ def create_passport(create_profile):
 def add_passports(create_profile):
     """Fixture to more passports."""
     profile = create_profile
-    passports = [{
-        "image": "https://passport.usi.com",
-        "passport_number": "A1039924",
-        "country": "Ghana",
-        "issued_date": "2019-03-12",
-        "expiry_date": "2019-08-29",
-        "profile": profile
-    }, {
-        "image": "https://passport.usi.com",
-        "passport_number": "A1039908",
-        "country": "Senegal",
-        "issued_date": "2019-03-12",
-        "expiry_date": "2019-08-29",
-        "profile": profile
-    }, {
-        "image": "https://passport.usi.com",
-        "passport_number": "A1039939",
-        "country": "Nigeria",
-        "issued_date": "2019-03-12",
-        "expiry_date": "2019-08-29",
-        "profile": profile
-    }]
+
+    passports = []
+    for index in range(5):
+        passport_copy = NEW_PASSPORT.copy()
+        passport_copy['passport_number'] = f'A1234567{index}'
+        passport_copy['profile'] = profile
+        passports.append(passport_copy)
+
     return [Passport.objects.create(**passport) for passport in passports]
+
+
+@pytest.fixture(scope='function')
+def add_seats():
+    """Fixture to add seats"""
+
+    return [Seats.objects.create(**seat) for seat in SEATS]
+
+
+@pytest.fixture(scope='function')
+def add_planes(add_seats):
+    """Fixture to add plane"""
+
+    seats = add_seats
+    planes = [Plane.objects.create(**plane) for plane in NEW_PLANE]
+
+    for plane in planes:
+        plane.seats.set(seats)
+        plane.save()
+
+    return planes
