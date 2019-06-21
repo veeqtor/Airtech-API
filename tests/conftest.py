@@ -5,12 +5,13 @@ from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
 
 from src.apps.user_profile.models import Passport
-from src.apps.flight.models import Plane, Seats
+from src.apps.flight.models import Plane, Seats, Flight
 from src.apps.user.api.serializer import UserSerializer
 from tests.fixtures.user import USER
 from tests.fixtures.user_profile import NEW_PROFILE
 from tests.fixtures.passport import NEW_PASSPORT
 from tests.fixtures.plane import NEW_PLANE, SEATS
+from tests.fixtures.flight import NEW_FLIGHT
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -127,3 +128,19 @@ def add_planes(add_seats):
         plane.save()
 
     return planes
+
+
+@pytest.fixture(scope='function')
+def add_flights(add_planes):
+    """Fixture to add flights"""
+
+    plane = add_planes[0]
+
+    flights = []
+    for index in range(2):
+        flight_copy = NEW_FLIGHT.copy()
+        flight_copy['plane'] = plane
+        flight_copy['flight_number'] = f"FLI-001{index}"
+        flights.append(flight_copy)
+
+    return [Flight.objects.create(**passport) for passport in flights]
