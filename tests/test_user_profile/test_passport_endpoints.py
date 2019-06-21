@@ -44,7 +44,6 @@ class TestUserPassportView:
         data = resp_data['data']
         assert response.status_code == 201
         assert resp_data['status'] == 'success'
-        assert data['image'] == NEW_PASSPORT['image']
         assert data['passport_number'] == NEW_PASSPORT['passport_number']
         assert data['issued_date'] == NEW_PASSPORT['issued_date']
         assert data['expiry_date'] == NEW_PASSPORT['expiry_date']
@@ -57,6 +56,7 @@ class TestUserPassportView:
         user = passports[0].profile.user
         token = generate_token(user)
         auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        NEW_PASSPORT['passport_number'] = passports[0].passport_number
 
         response = client.post(PASSPORT_URL,
                                data=NEW_PASSPORT,

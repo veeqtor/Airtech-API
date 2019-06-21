@@ -1,7 +1,6 @@
 """Module for user passport fixtures"""
 
 NEW_PASSPORT = {
-    "image": "https://passport.usi.com",
     "passport_number": "A1039939",
     "country": "Ghana",
     "issued_date": "2019-03-12",

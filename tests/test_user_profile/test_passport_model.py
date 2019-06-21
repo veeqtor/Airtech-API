@@ -10,7 +10,7 @@ class TestPassportModel:
     """Test passport model"""
 
     def test_the_model_string_succeeds(self, create_passport):
-        """Test that vendors model string rep is correct."""
+        """Test that passport model string rep is correct."""
 
         passport = create_passport
         assert passport.__str__(
@@ -22,7 +22,6 @@ class TestPassportModel:
         """
         passport = create_passport
 
-        assert passport.image == NEW_PASSPORT['image']
         assert passport.passport_number == NEW_PASSPORT['passport_number']
         assert passport.country == NEW_PASSPORT['country']
         assert passport.issued_date == NEW_PASSPORT['issued_date']
