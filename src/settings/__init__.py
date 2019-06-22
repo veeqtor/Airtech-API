@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'src.apps.user.apps.UserConfig',
     'src.apps.user_profile.apps.UserProfileConfig',
     'src.apps.flight.apps.FlightConfig',
+    'src.apps.booking.apps.BookingConfig',
 ]
 
 # Custom user model
