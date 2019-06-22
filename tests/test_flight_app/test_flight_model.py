@@ -17,7 +17,7 @@ class TestFlightModel:
         ) == f'{flight.flight_number} - ' \
             f'{flight.take_off} to {flight.destination}'
 
-    def test_plane_creation_succeeds(self, add_flights):
+    def test_flight_creation_succeeds(self, add_flights):
         """
         Test that a flight model can be successfully created.
         """
