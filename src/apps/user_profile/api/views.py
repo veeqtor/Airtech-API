@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from src.apps.core.utilities.response_utils import ResponseHandler
-from src.apps.user_profile.api.serializer import (UserProfileSerializer,
-                                                  PassportSerializer)
+from src.apps.user_profile.api.serializers import (UserProfileSerializer,
+                                                   PassportSerializer)
 
 
 class UserProfileUpdate(generics.RetrieveUpdateAPIView):
@@ -61,12 +61,6 @@ class PassportViewSet(viewsets.ModelViewSet):
         List all Passports for the logged in user.
         """
         instance = self.get_queryset()
-
-        page = self.paginate_queryset(instance)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(instance, many=True)
         response = ResponseHandler.response(serializer.data)
         return Response(response)

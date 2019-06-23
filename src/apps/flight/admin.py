@@ -23,11 +23,11 @@ class SeatsAdmin(admin.ModelAdmin):
     """custom admin for the seats model"""
 
     ordering = ['type']
-    list_display = ['type', 'number', 'booked', 'reserved']
+    list_display = ['type', 'seat_number', 'booked', 'reserved']
     list_per_page = 25
 
     fieldsets = ((_('Seat info'), {
-        'fields': ('type', 'number', 'booked', 'reserved')
+        'fields': ('type', 'seat_number', 'booked', 'reserved')
     }), )
 
 

@@ -1,3 +1,3 @@
 """ Django production settings for airtech project. """
 
-from . import *
+from . import *  # noqa: F403, F401

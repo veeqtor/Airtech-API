@@ -52,7 +52,7 @@ class TestPlaneAndSeatModel:
         """Test that seat model string rep is correct."""
 
         seat = add_seats[0]
-        assert seat.__str__() == f'{seat.type} - {seat.number}'
+        assert seat.__str__() == f'{seat.type} - {seat.seat_number}'
 
     def test_seat_creation_succeeds(self, add_seats):
         """
@@ -61,7 +61,7 @@ class TestPlaneAndSeatModel:
         seat = add_seats[0]
 
         assert seat.type == SEATS[0]['type']
-        assert seat.number == SEATS[0]['number']
+        assert seat.seat_number == SEATS[0]['seat_number']
 
     def test_seat_deletion_succeeds(self, add_seats):
         """

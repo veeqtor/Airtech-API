@@ -16,3 +16,14 @@ NEW_FLIGHT = {
 
 DURATION = datetime.datetime.combine(date.min, datetime.time(
     11, 15)) - datetime.datetime.combine(date.min, datetime.time(8, 10))
+
+INVALID_FLIGHT = {
+    "flight_number": "",
+    "plane": "{}",
+    "take_off": "LOS",
+    "destination": "ATL",
+    "price": "",
+    "date": date.today() + timedelta(days=4),
+    "departure_time": datetime.time(8, 10),
+    "arrival_time": datetime.time(11, 15),
+}
