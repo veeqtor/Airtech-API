@@ -49,6 +49,10 @@ This is a python API built with [**Django v2.2**](https://docs.djangoproject.com
 
 ### Setting up for development
 
+```
+NOTE: This setup is for MacOS only, Windows setup will be coming soon.
+```
+
 -   Check that python 3 is installed:
 
     ```bash
