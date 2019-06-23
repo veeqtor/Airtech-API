@@ -6,7 +6,7 @@ from rest_framework_jwt.settings import api_settings
 
 from src.apps.user_profile.models import Passport
 from src.apps.flight.models import Plane, Seats, Flight
-from src.apps.booking.models import Reservation
+from src.apps.booking.models import Reservation, Ticket
 from src.apps.user.api.serializer import UserSerializer
 from tests.fixtures.user import USER
 from tests.fixtures.user_profile import NEW_PROFILE
@@ -14,6 +14,7 @@ from tests.fixtures.passport import NEW_PASSPORT
 from tests.fixtures.plane import NEW_PLANE, SEATS
 from tests.fixtures.flight import NEW_FLIGHT
 from tests.fixtures.reservation import NEW_RESERVATION
+from tests.fixtures.ticket import NEW_TICKET
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -166,3 +167,20 @@ def add_reservations(create_user):
         Reservation.objects.create(**reservation)
         for reservation in reservations
     ]
+
+
+@pytest.fixture(scope='function')
+def add_tickets(create_user):
+    """Fixture to add tickets"""
+
+    user = create_user(USER)
+
+    tickets = []
+    for index, ticket in enumerate(NEW_TICKET):
+
+        ticket['made_by'] = user
+        ticket['flight_number'] = f"BL-402{index}"
+        ticket['seat'] = f"E02{index}"
+        tickets.append(ticket)
+
+    return [Ticket.objects.create(**ticket) for ticket in tickets]

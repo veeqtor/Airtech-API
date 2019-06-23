@@ -1,0 +1,53 @@
+"""Test module for the ticket model"""
+
+import pytest
+
+from tests.fixtures.ticket import NEW_TICKET
+
+pytestmark = pytest.mark.django_db
+
+
+class TestTicketModel:
+    """Test ticket model"""
+
+    def test_the_model_string_succeeds(self, add_tickets):
+        """Test that ticket model string rep is correct."""
+
+        ticket = add_tickets[0]
+        assert ticket.__str__() == f'{ticket.ticket_ref} - {ticket.seat}'
+
+    def test_ticket_creation_succeeds(self, add_tickets):
+        """
+        Test that a ticket model can be successfully created.
+        """
+        ticket = add_tickets[0]
+
+        assert ticket.flight_number is not None
+        assert ticket.seat is not None
+        assert ticket.made_by is not None
+        assert ticket.date_made is not None
+        assert ticket.ticket_ref == NEW_TICKET[0]['ticket_ref']
+        assert ticket.destination == NEW_TICKET[0]['destination']
+        assert ticket.arrival_time == NEW_TICKET[0]['arrival_time']
+        assert ticket.departure_time == NEW_TICKET[0]['departure_time']
+        assert ticket.take_off == NEW_TICKET[0]['take_off']
+
+    def test_ticket_deletion_succeeds(self, add_tickets):
+        """
+        Test ticket deletion
+        """
+
+        ticket = add_tickets[0]
+        ticket.delete()
+
+        assert ticket.deleted
+
+    def test_ticket_hard_deletion_succeeds(self, add_tickets):
+        """
+        Test ticket hard deletion
+        """
+
+        ticket = add_tickets[0]
+        ticket.hard_delete()
+
+        assert ticket.id is None
