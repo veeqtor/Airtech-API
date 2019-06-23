@@ -34,7 +34,7 @@ Staging Link: N/A
 
 ## Getting Started
 
-This is a python API built with [**Django v2.2**](https://docs.djangoproject.com) and [**Dango Rest Framework**](https://www.django-rest-framework.org) framework. Authentication of users is done via [**JSON Web Tokens**](https://jwt.io/).
+This is a python API built with [**Django v2.2**](https://docs.djangoproject.com) and [**Django Rest Framework**](https://www.django-rest-framework.org) framework. Authentication of users is done via [**JSON Web Tokens**](https://jwt.io/).
 
 ## Technologies
 
@@ -42,7 +42,7 @@ This is a python API built with [**Django v2.2**](https://docs.djangoproject.com
 
 - [**Django v2.2**](https://docs.djangoproject.com)
 
-- [**Dango Rest Framework**](https://www.django-rest-framework.org) 
+- [**Django Rest Framework**](https://www.django-rest-framework.org) 
 
 - [**PostgreSQL**](https://www.postgresql.org/)
 
