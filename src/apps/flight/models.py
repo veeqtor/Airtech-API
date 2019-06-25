@@ -17,10 +17,10 @@ class Seats(BaseAuditableModel):
     type = models.CharField(_('Seat type'), max_length=20, choices=TYPE)
     booked = models.BooleanField(_('Is booked'), default=False)
     reserved = models.BooleanField(_('Is reserved'), default=False)
-    number = models.CharField(_('Seat number'), max_length=10)
+    seat_number = models.CharField(_('Seat number'), max_length=10)
 
     def __str__(self):
-        return f'{self.type} - {self.number}'
+        return f'{self.type} - {self.seat_number}'
 
     class Meta:
         """Meta class"""
@@ -32,7 +32,7 @@ class Seats(BaseAuditableModel):
 class Plane(BaseAuditableModel):
     """Model representing the Plane table"""
 
-    model = models.CharField(_('Plane model'), max_length=100, null=True)
+    model = models.CharField(_('Plane model'), max_length=100, null=False)
     grounded = models.BooleanField(_('Is Grounded'), default=False)
     seats = models.ManyToManyField(Seats, related_name="plane")
 
@@ -40,7 +40,8 @@ class Plane(BaseAuditableModel):
     def get_seats(self):
         """Get all seats"""
 
-        return "\n".join([seat.number for seat in self.seats.order_by('type')])
+        return "\n".join(
+            [seat.seat_number for seat in self.seats.order_by('type')])
 
     def __str__(self):
         return self.model
@@ -61,10 +62,13 @@ class Flight(BaseAuditableModel):
 
     flight_number = models.CharField(_('Flight number'),
                                      max_length=100,
-                                     null=True)
+                                     unique=True,
+                                     null=False)
     price = models.DecimalField(_('Price'), max_digits=11, decimal_places=2)
-    take_off = models.CharField(_('Take off'), max_length=100, null=True)
-    destination = models.CharField(_('Destination'), max_length=100, null=True)
+    take_off = models.CharField(_('Take off'), max_length=100, null=False)
+    destination = models.CharField(_('Destination'),
+                                   max_length=100,
+                                   null=False)
     date = models.DateField(_('Date'))
     departure_time = models.TimeField(_('Departure Time'))
     arrival_time = models.TimeField(_('Arrival Time'))

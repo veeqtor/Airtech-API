@@ -7,7 +7,7 @@ from rest_framework_jwt.settings import api_settings
 from src.apps.user_profile.models import Passport
 from src.apps.flight.models import Plane, Seats, Flight
 from src.apps.booking.models import Reservation, Ticket
-from src.apps.user.api.serializer import UserSerializer
+from src.apps.user.api.serializers import UserSerializer
 from tests.fixtures.user import USER
 from tests.fixtures.user_profile import NEW_PROFILE
 from tests.fixtures.passport import NEW_PASSPORT

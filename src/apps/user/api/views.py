@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.views import ObtainJSONWebToken
 
-from src.apps.user.api.serializer import UserSerializer, AuthTokenSerializer
+from src.apps.user.api.serializers import UserSerializer, AuthTokenSerializer
 from src.apps.core.utilities import random_token
 from src.apps.core.utilities.response_utils import ResponseHandler
 

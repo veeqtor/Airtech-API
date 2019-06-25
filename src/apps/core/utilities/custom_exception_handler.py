@@ -16,7 +16,8 @@ def custom_exception_handler(exc, context):
     if response and response.status_code == status.HTTP_404_NOT_FOUND:
         response.data = {'status': 'error', 'user_message': ERRORS['USR_09']}
 
-    elif response and response.status_code == status.HTTP_401_UNAUTHORIZED:
+    elif response and (response.status_code == status.HTTP_401_UNAUTHORIZED
+                       or response.status_code == status.HTTP_403_FORBIDDEN):
 
         response.data = {
             'status': 'error',

@@ -4,6 +4,8 @@ MESSAGES = {
     'REGISTER': 'successfully registered.',
     'LOGIN': 'successfully logged in.',
     'PASSPORT': 'Added a new passport.',
+    'PLANE': 'Added a new plane.',
+    'FLIGHT': 'Added a new flight.',
 }
 
 ERRORS = {
@@ -17,5 +19,6 @@ ERRORS = {
     'USR_07': 'This field may not be blank.',
     'USR_09': 'Sorry, We could not find what you are looking for.',
     'AUTH_01': 'Authentication credentials were not provided.',
+    'AUTH_02': 'You do not have permission to perform this action.',
     'CUST_01': '{} with this {} already exists.'
 }

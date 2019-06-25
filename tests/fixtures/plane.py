@@ -12,20 +12,20 @@ SEATS = [{
     "type": 'ECO',
     "booked": False,
     "reserved": False,
-    "number": 'E001'
+    "seat_number": 'E001'
 }, {
     "type": 'ECO',
     "booked": False,
     "reserved": False,
-    "number": 'E002'
+    "seat_number": 'E002'
 }, {
     "type": 'BUS',
     "booked": False,
     "reserved": False,
-    "number": 'B001'
+    "seat_number": 'B001'
 }, {
     "type": 'BUS',
     "booked": False,
     "reserved": False,
-    "number": 'B002'
+    "seat_number": 'B002'
 }]
