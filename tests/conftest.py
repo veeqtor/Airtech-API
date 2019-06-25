@@ -1,4 +1,6 @@
 """Module for pytest configs and fixtures"""
+from datetime import date, timedelta
+import datetime
 
 import pytest
 from django.contrib.auth import get_user_model
@@ -12,9 +14,6 @@ from tests.fixtures.user import USER
 from tests.fixtures.user_profile import NEW_PROFILE
 from tests.fixtures.passport import NEW_PASSPORT
 from tests.fixtures.plane import NEW_PLANE, SEATS
-from tests.fixtures.flight import NEW_FLIGHT
-from tests.fixtures.reservation import NEW_RESERVATION
-from tests.fixtures.ticket import NEW_TICKET
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -137,31 +136,44 @@ def add_planes(add_seats):
 def add_flights(add_planes):
     """Fixture to add flights"""
 
-    plane = add_planes[0]
-
-    flights = []
-    for index in range(2):
-        flight_copy = NEW_FLIGHT.copy()
-        flight_copy['plane'] = plane
-        flight_copy['flight_number'] = f"FLI-001{index}"
-        flights.append(flight_copy)
+    flights = [{
+        "flight_number": "FLI-0011",
+        "plane": add_planes[0],
+        "take_off": "LOS",
+        "destination": "ATL",
+        "price": 2300.34,
+        "date": date.today() + timedelta(days=4),
+        "departure_time": datetime.time(8, 10),
+        "arrival_time": datetime.time(11, 15),
+    }, {
+        "flight_number": "FLI-0010",
+        "plane": add_planes[1],
+        "take_off": "LOS",
+        "destination": "ATL",
+        "price": 2300.34,
+        "date": date.today() + timedelta(days=4),
+        "departure_time": datetime.time(8, 10),
+        "arrival_time": datetime.time(11, 15),
+    }]
 
     return [Flight.objects.create(**flight) for flight in flights]
 
 
 @pytest.fixture(scope='function')
-def add_reservations(create_user):
+def add_reservations(create_user, add_flights):
     """Fixture to add reservations"""
 
     user = create_user(USER)
 
-    reservations = []
-    for index in range(2):
-        reservation = NEW_RESERVATION.copy()
-        reservation['made_by'] = user
-        reservation['flight_number'] = f"BL-202{index}"
-        reservation['seat'] = f"E00{index}"
-        reservations.append(reservation)
+    reservations = [{
+        "flight": add_flights[0],
+        "seat_number": "E001",
+        "made_by": user,
+    }, {
+        "flight": add_flights[1],
+        "seat_number": "E001",
+        "made_by": user
+    }]
 
     return [
         Reservation.objects.create(**reservation)
@@ -170,17 +182,32 @@ def add_reservations(create_user):
 
 
 @pytest.fixture(scope='function')
-def add_tickets(create_user):
+def add_tickets(create_user, add_flights):
     """Fixture to add tickets"""
 
     user = create_user(USER)
-
-    tickets = []
-    for index, ticket in enumerate(NEW_TICKET):
-
-        ticket['made_by'] = user
-        ticket['flight_number'] = f"BL-402{index}"
-        ticket['seat'] = f"E02{index}"
-        tickets.append(ticket)
+    tickets = [{
+        "ticket_ref": "LOS29203SLC",
+        "paid": False,
+        "flight": add_flights[0],
+        "take_off": "LOS",
+        "destination": "SLC",
+        "seat_number": "E001",
+        "date": date.today() + timedelta(days=5),
+        "departure_time": datetime.time(10, 10),
+        "arrival_time": datetime.time(22, 15),
+        "made_by": user,
+    }, {
+        "ticket_ref": "LOS24933SLC",
+        "paid": False,
+        "flight": add_flights[1],
+        "take_off": "SLC",
+        "destination": "LOS",
+        "seat_number": "E001",
+        "date": date.today() + timedelta(days=5),
+        "departure_time": datetime.time(8, 10),
+        "arrival_time": datetime.time(11, 15),
+        "made_by": user
+    }]
 
     return [Ticket.objects.create(**ticket) for ticket in tickets]

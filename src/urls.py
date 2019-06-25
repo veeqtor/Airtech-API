@@ -26,5 +26,8 @@ urlpatterns = [
     path(f'{BASE_VERSION}users/',
          include(('src.apps.user.api.urls', 'user'), namespace='user')),
     path(f'{BASE_VERSION}flights/',
-         include(('src.apps.flight.api.urls', 'flight'), namespace='flight'))
+         include(('src.apps.flight.api.urls', 'flight'), namespace='flight')),
+    path(
+        f'{BASE_VERSION}bookings/',
+        include(('src.apps.booking.api.urls', 'booking'), namespace='booking'))
 ]

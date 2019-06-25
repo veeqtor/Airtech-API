@@ -14,7 +14,8 @@ class TestTicketModel:
         """Test that ticket model string rep is correct."""
 
         ticket = add_tickets[0]
-        assert ticket.__str__() == f'{ticket.ticket_ref} - {ticket.seat}'
+        assert ticket.__str__(
+        ) == f'{ticket.ticket_ref} - {ticket.seat_number}'
 
     def test_ticket_creation_succeeds(self, add_tickets):
         """
@@ -22,8 +23,8 @@ class TestTicketModel:
         """
         ticket = add_tickets[0]
 
-        assert ticket.flight_number is not None
-        assert ticket.seat is not None
+        assert ticket.flight is not None
+        assert ticket.seat_number is not None
         assert ticket.made_by is not None
         assert ticket.date_made is not None
         assert ticket.flight_duration is not None
