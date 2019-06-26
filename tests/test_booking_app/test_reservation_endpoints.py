@@ -1,11 +1,13 @@
 """Test module for the reservation endpoint"""
 
 import pytest
+from datetime import date, timedelta
 from django.urls import resolve, reverse
 
 from src.apps.core.utilities.messages import ERRORS, MESSAGES
 
-RESERVATION_URL = reverse('booking:reservation')
+RESERVATION_URL = reverse('booking:reservation-list')
+RESERVATION_URL_DETAIL = 'booking:reservation-detail'
 
 
 @pytest.mark.django_db
@@ -15,7 +17,7 @@ class TestReservationView:
     def test_reservation_url_succeeds(self):
         """Test the paths"""
 
-        assert resolve(RESERVATION_URL).view_name == 'booking:reservation'
+        assert resolve(RESERVATION_URL).view_name == 'booking:reservation-list'
 
     def test_making_a_reservation_succeeds(self, auth_header, client,
                                            add_flights):
@@ -113,8 +115,12 @@ class TestReservationView:
         assert resp_data['status'] == 'error'
         assert errors['seat_number'][0] == ERRORS['USR_07']
 
-    def test_getting_all_reservations_succeeds(self, auth_header, client):
+    def test_getting_all_reservations_succeeds(self, generate_token,
+                                               add_reservations, client):
         """Test getting reservations made by a logged in user"""
+        reservation = add_reservations[0]
+        token = generate_token(reservation.made_by)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
 
         response = client.get(RESERVATION_URL, **auth_header)
         resp_data = response.data
@@ -122,5 +128,116 @@ class TestReservationView:
         data = resp_data['data']
         assert response.status_code == 200
         assert resp_data['status'] == 'success'
-        assert len(data) == 0
+        assert len(data) == 2
         assert isinstance(data, list)
+
+    def test_user_can_edit_reservations_succeeds(self, add_reservations,
+                                                 generate_token, client):
+        """
+        Test that users can edit there reservations.
+        """
+        reservation = add_reservations[0]
+        token = generate_token(reservation.made_by)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+
+        flight = reservation.flight
+        seats = flight.plane.seats.first()
+        reservation_url = reverse(RESERVATION_URL_DETAIL,
+                                  args=[reservation.id])
+
+        data = {'type': seats.type, 'seat_number': seats.seat_number}
+
+        response = client.patch(reservation_url,
+                                content_type='application/json',
+                                data=data,
+                                **auth_header)
+        resp_data = response.data
+
+        data = resp_data['data']
+        assert response.status_code == 200
+        assert resp_data['status'] == 'success'
+        assert data == MESSAGES['RESERVED'].format(seats.seat_number,
+                                                   flight.flight_number)
+
+    def test_user_can_edit_reservations_fails(self, add_reservations,
+                                              generate_token, client):
+        """
+        Test that users can edit there reservations fails.
+        """
+        reservation = add_reservations[0]
+        token = generate_token(reservation.made_by)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+
+        flight = reservation.flight
+        seats = flight.plane.seats.first()
+        reservation_url = reverse(RESERVATION_URL_DETAIL,
+                                  args=[reservation.id])
+
+        data = {'type': seats.type, 'seat_number': ''}
+
+        response = client.patch(reservation_url,
+                                content_type='application/json',
+                                data=data,
+                                **auth_header)
+        resp_data = response.data
+        errors = resp_data['errors']
+        assert response.status_code == 400
+        assert resp_data['status'] == 'error'
+        assert errors['seat_number'][0] == ERRORS['USR_07']
+
+    def test_user_can_edit_same_reservations_fails(self, add_reservations,
+                                                   generate_token, client):
+        """
+        Test that users can edit there reservations fails.
+        """
+        reservation = add_reservations[0]
+        flight = reservation.flight
+        seat = flight.plane.seats.get(type=reservation.type,
+                                      seat_number=reservation.seat_number)
+        seat.reserved = True
+        seat.save()
+        token = generate_token(reservation.made_by)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        reservation_url = reverse(RESERVATION_URL_DETAIL,
+                                  args=[reservation.id])
+        data = {
+            'type': reservation.type,
+            'seat_number': reservation.seat_number
+        }
+        response = client.patch(reservation_url,
+                                content_type='application/json',
+                                data=data,
+                                **auth_header)
+        resp_data = response.data
+        message = resp_data['user_message']
+        assert response.status_code == 400
+        assert resp_data['status'] == 'error'
+        assert message == ERRORS['FLI_01']
+
+    def test_user_edit_allowance_days_for_reservation_for_a_period_of_time(
+            self, add_reservations, generate_token, client):
+        """Test that users cannot edit the reservations after a period of
+        time."""
+
+        reservation = add_reservations[0]
+        flight = reservation.flight
+        flight.date = date.today() + timedelta(days=4)
+        flight.save()
+        token = generate_token(reservation.made_by)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        reservation_url = reverse(RESERVATION_URL_DETAIL,
+                                  args=[reservation.id])
+
+        data = {
+            'type': reservation.type,
+            'seat_number': reservation.seat_number
+        }
+        response = client.patch(reservation_url,
+                                content_type='application/json',
+                                data=data,
+                                **auth_header)
+        resp_data = response.data
+        message = resp_data['user_message']
+        assert response.status_code == 403
+        assert resp_data['status'] == 'error'
+        assert message == ERRORS['FLI_02']

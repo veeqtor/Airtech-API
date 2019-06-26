@@ -204,3 +204,6 @@ JWT_AUTH = {
     'src.apps.core.utilities.jwt_handlers.'
     'jwt_get_username_from_payload_handler',
 }
+
+# Number of days users are allowed to modify their booking or reservations
+FLIGHT_EDIT_ALLOWANCE_DAYS = 5

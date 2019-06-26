@@ -27,7 +27,7 @@ class TestFlightModel:
         assert flight.price == NEW_FLIGHT['price']
         assert flight.take_off == NEW_FLIGHT['take_off']
         assert flight.destination == NEW_FLIGHT['destination']
-        assert flight.date == NEW_FLIGHT['date']
+        assert flight.date is not None
         assert flight.departure_time == NEW_FLIGHT['departure_time']
         assert flight.arrival_time == NEW_FLIGHT['arrival_time']
         assert flight.flight_duration == DURATION
