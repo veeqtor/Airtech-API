@@ -23,6 +23,8 @@ class TestReservationModel:
 
         assert reservation.flight is not None
         assert reservation.seat_number is not None
+        assert reservation.booked is False
+        assert reservation.type is not None
         assert reservation.made_by is not None
         assert reservation.date_made is not None
 

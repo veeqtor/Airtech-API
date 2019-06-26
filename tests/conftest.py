@@ -142,7 +142,7 @@ def add_flights(add_planes):
         "take_off": "LOS",
         "destination": "ATL",
         "price": 2300.34,
-        "date": date.today() + timedelta(days=4),
+        "date": date.today() + timedelta(days=7),
         "departure_time": datetime.time(8, 10),
         "arrival_time": datetime.time(11, 15),
     }, {
@@ -151,7 +151,7 @@ def add_flights(add_planes):
         "take_off": "LOS",
         "destination": "ATL",
         "price": 2300.34,
-        "date": date.today() + timedelta(days=4),
+        "date": date.today() + timedelta(days=7),
         "departure_time": datetime.time(8, 10),
         "arrival_time": datetime.time(11, 15),
     }]
@@ -168,10 +168,12 @@ def add_reservations(create_user, add_flights):
     reservations = [{
         "flight": add_flights[0],
         "seat_number": "E001",
+        "type": "ECO",
         "made_by": user,
     }, {
         "flight": add_flights[1],
         "seat_number": "E001",
+        "type": "ECO",
         "made_by": user
     }]
 

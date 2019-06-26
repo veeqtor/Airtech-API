@@ -1,4 +1,5 @@
 """Module for messages"""
+from django.conf import settings
 
 MESSAGES = {
     'REGISTER': 'successfully registered.',
@@ -38,5 +39,7 @@ ERRORS = {
     'the flight is not available or the seat has already '
     'been booked/reserved.',
     'FLI_02':
-    'This seat has been booked.'
+    'Sorry but you cannot modify your reservation/booking '
+    f'{settings.FLIGHT_EDIT_ALLOWANCE_DAYS} days before the '
+    'flight date.'
 }
