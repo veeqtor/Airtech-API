@@ -13,7 +13,7 @@ class TestReservationModel:
 
         reservation = add_reservations[0]
         assert reservation.__str__(
-        ) == f'{reservation.flight_number} - {reservation.seat}'
+        ) == f'{reservation.flight} - {reservation.seat_number}'
 
     def test_reservation_creation_succeeds(self, add_reservations):
         """
@@ -21,8 +21,8 @@ class TestReservationModel:
         """
         reservation = add_reservations[0]
 
-        assert reservation.flight_number is not None
-        assert reservation.seat is not None
+        assert reservation.flight is not None
+        assert reservation.seat_number is not None
         assert reservation.made_by is not None
         assert reservation.date_made is not None
 
