@@ -11,7 +11,8 @@ from src.apps.booking.api.serializers import (ReservationSerializer,
                                               TicketSerializer)
 
 
-class ReservationsView(generics.CreateAPIView, generics.RetrieveAPIView):
+class ReservationsView(generics.CreateAPIView, generics.ListAPIView,
+                       generics.RetrieveAPIView):
     """
     View set for Reservations.
     """
@@ -19,14 +20,14 @@ class ReservationsView(generics.CreateAPIView, generics.RetrieveAPIView):
     serializer_class = ReservationSerializer
     permission_classes = [IsAuthenticated]
 
-    # def list(self, request, *args, **kwargs):
-    #     """Method to list reservations made."""
-    #
-    #     queryset = self.filter_queryset(self.get_queryset())
-    #
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     res = ResponseHandler.response(serializer.data)
-    #     return Response(res)
+    def list(self, request, *args, **kwargs):
+        """Method to list reservations made."""
+
+        queryset = self.filter_queryset(self.get_queryset())
+
+        serializer = self.get_serializer(queryset, many=True)
+        res = ResponseHandler.response(serializer.data)
+        return Response(res)
 
     def create(self, request, *args, **kwargs):
         """Method to create a ticket."""

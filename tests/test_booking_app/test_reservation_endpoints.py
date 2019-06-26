@@ -93,7 +93,7 @@ class TestReservationView:
 
     def test_user_cannot_make_a_reservation_with_empty_data_fails(
             self, auth_header, client, add_flights):
-        """Test making a reservation"""
+        """Test making a reservation fails"""
 
         flight = add_flights[0]
         seats = flight.plane.seats.all()
@@ -112,3 +112,15 @@ class TestReservationView:
         assert response.status_code == 400
         assert resp_data['status'] == 'error'
         assert errors['seat_number'][0] == ERRORS['USR_07']
+
+    def test_getting_all_reservations_succeeds(self, auth_header, client):
+        """Test getting reservations made by a logged in user"""
+
+        response = client.get(RESERVATION_URL, **auth_header)
+        resp_data = response.data
+
+        data = resp_data['data']
+        assert response.status_code == 200
+        assert resp_data['status'] == 'success'
+        assert len(data) == 0
+        assert isinstance(data, list)
