@@ -1,9 +1,12 @@
 """Module for the bookings views."""
 from datetime import timedelta, date
 from django.conf import settings
+
+from rest_framework.decorators import action
 from rest_framework import generics, status, mixins, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+
 from src.apps.core.utilities.response_utils import ResponseHandler
 from src.apps.core.utilities.messages import MESSAGES
 from src.apps.booking.models import (Reservation, Ticket)
@@ -95,9 +98,9 @@ class ReservationsView(mixins.CreateModelMixin, mixins.ListModelMixin,
         today = date.today()
         flight_date = instance.flight.date
 
-        # Check if the dates are with edit range
-        if (flight_date -
-                today) <= timedelta(days=settings.FLIGHT_EDIT_ALLOWANCE_DAYS):
+        # Check if the dates are within edit range
+        if (flight_date - today) <= timedelta(
+                days=settings.FLIGHT_EDIT_ALLOWANCE_DAYS):  # noqa W504
             error = ResponseHandler.response({}, key='FLI_02', status='error')
             return Response(error, status=status.HTTP_403_FORBIDDEN)
 
@@ -145,6 +148,35 @@ class ReservationsView(mixins.CreateModelMixin, mixins.ListModelMixin,
                                          key='USR_O3',
                                          status='error')
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True)
+    def cancel(self, request, *args, **kwargs):  # noqa: F401
+        """
+        Cancel a reservation.
+        """
+        instance = self.get_object()
+        today = date.today()
+        flight_date = instance.flight.date
+
+        # Check if the dates are within edit range
+        if (flight_date - today) <= timedelta(
+                days=settings.FLIGHT_EDIT_ALLOWANCE_DAYS):  # noqa W504
+            error = ResponseHandler.response({}, key='FLI_02', status='error')
+            return Response(error, status=status.HTTP_403_FORBIDDEN)
+
+        # Free up the seat.
+        seat = instance.flight.plane.seats.filter(
+            type=instance.type,
+            seat_number=instance.seat_number,
+            deleted=False).first()
+
+        seat.reserved = False
+        seat.save()
+        instance.delete()
+
+        res = ResponseHandler.response(data=MESSAGES['RESERVE_CANCEL'].format(
+            instance.flight.flight_number))
+        return Response(res)
 
     def get_object(self):
         """

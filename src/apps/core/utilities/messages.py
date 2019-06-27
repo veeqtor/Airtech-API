@@ -2,12 +2,21 @@
 from django.conf import settings
 
 MESSAGES = {
-    'REGISTER': 'successfully registered.',
-    'LOGIN': 'successfully logged in.',
-    'PASSPORT': 'Added a new passport.',
-    'PLANE': 'Added a new plane.',
-    'FLIGHT': 'Added a new flight.',
-    'RESERVED': 'Seat {} on flight {} has been successfully reserved for you.'
+    'REGISTER':
+    'successfully registered.',
+    'LOGIN':
+    'successfully logged in.',
+    'PASSPORT':
+    'Added a new passport.',
+    'PLANE':
+    'Added a new plane.',
+    'FLIGHT':
+    'Added a new flight.',
+    'RESERVED':
+    'Seat {} on flight {} has been successfully reserved for you.',
+    'RESERVE_CANCEL':
+    'You have successfully cancelled your reservation '
+    'for flight {}.'
 }
 
 ERRORS = {
@@ -39,7 +48,7 @@ ERRORS = {
     'the flight is not available or the seat has already '
     'been booked/reserved.',
     'FLI_02':
-    'Sorry but you cannot modify your reservation/booking '
+    'Sorry but you cannot modify/cancel your reservation/booking '
     f'{settings.FLIGHT_EDIT_ALLOWANCE_DAYS} days before the '
     'flight date.'
 }
