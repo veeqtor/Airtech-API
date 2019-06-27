@@ -14,8 +14,12 @@ MESSAGES = {
     'Added a new flight.',
     'RESERVED':
     'Seat {} on flight {} has been successfully reserved for you.',
+    'BOOKED':
+    'Seat {} on flight {} has been successfully booked for you.',
     'RESERVE_CANCEL':
-    'You have successfully cancelled your reservation '
+    'You have successfully cancelled your reservation ',
+    'TICKET_CANCEL':
+    'You have successfully cancelled your ticket '
     'for flight {}.'
 }
 

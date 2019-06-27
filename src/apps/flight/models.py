@@ -80,7 +80,7 @@ class Flight(BaseAuditableModel):
         duration = datetime.combine(date.min,
                                     self.arrival_time) - datetime.combine(
                                         date.min, self.departure_time)
-        return duration
+        return str(duration)
 
     def __str__(self):
         return f'{self.flight_number} - {self.take_off} to {self.destination}'
