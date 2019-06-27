@@ -8,6 +8,7 @@ from src.apps.core.utilities.messages import ERRORS, MESSAGES
 
 RESERVATION_URL = reverse('booking:reservation-list')
 RESERVATION_URL_DETAIL = 'booking:reservation-detail'
+RESERVATION_URL_CANCEL = 'booking:reservation-cancel'
 
 
 @pytest.mark.django_db
@@ -152,8 +153,11 @@ class TestReservationView:
                                 data=data,
                                 **auth_header)
         resp_data = response.data
-
         data = resp_data['data']
+        seat = flight.plane.seats.get(type=reservation.type,
+                                      seat_number=reservation.seat_number)
+
+        assert seat.reserved is False
         assert response.status_code == 200
         assert resp_data['status'] == 'success'
         assert data == MESSAGES['RESERVED'].format(seats.seat_number,
@@ -241,3 +245,47 @@ class TestReservationView:
         assert response.status_code == 403
         assert resp_data['status'] == 'error'
         assert message == ERRORS['FLI_02']
+
+    def test_user_cancel_allowance_days_for_reservation_for_a_period_of_time(
+            self, add_reservations, generate_token, client):
+        """Test that users cannot cancel the reservations before a period of
+        time."""
+
+        reservation = add_reservations[0]
+        flight = reservation.flight
+        flight.date = date.today() + timedelta(days=4)
+        flight.save()
+        token = generate_token(reservation.made_by)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        reservation_url = reverse(RESERVATION_URL_CANCEL,
+                                  args=[reservation.id])
+
+        response = client.get(reservation_url, **auth_header)
+        resp_data = response.data
+        message = resp_data['user_message']
+        assert response.status_code == 403
+        assert resp_data['status'] == 'error'
+        assert message == ERRORS['FLI_02']
+
+    def test_user_cancel_reservation(self, add_reservations, generate_token,
+                                     client):
+        """Test that users cannot cancel the reservations before a period of
+        time."""
+
+        reservation = add_reservations[0]
+        flight = reservation.flight
+        token = generate_token(reservation.made_by)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        reservation_url = reverse(RESERVATION_URL_CANCEL,
+                                  args=[reservation.id])
+
+        response = client.get(reservation_url, **auth_header)
+        resp_data = response.data
+        data = resp_data['data']
+
+        seat = flight.plane.seats.get(type=reservation.type,
+                                      seat_number=reservation.seat_number)
+        assert seat.reserved is False
+        assert response.status_code == 200
+        assert resp_data['status'] == 'success'
+        assert data == MESSAGES['RESERVE_CANCEL'].format(flight.flight_number)
