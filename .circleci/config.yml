@@ -9,6 +9,7 @@ default: &defaults
     # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
     - image: circleci/python:3.7.0
       environment:
+        PROJECT_PATH: ${HOME}airtech-api
         CC_TEST_REPORTER_ID: ${CC_TEST_REPORTER_ID}
         SECRET_KEY: ${SECRET_KEY}
         DB_NAME: ${DB_NAME}
@@ -71,18 +72,26 @@ attach_workspace: &cmd_attach_workspace
   attach_workspace:
     at: ~/airtech-api/tmp
 
+change_ownership: &cmd_change_ownership
+  run:
+    name: Change ownership of the cache dir.
+    command: |
+      sudo chown -R circleci:circleci /usr/local/bin
+      sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+
 version: 2
 jobs:
-  build_and_run_test:
+  test:
     <<: *defaults
     steps:
       - checkout
       - *cmd_attach_workspace
+      - *cmd_change_ownership
       - *cmd_restore_cache
       - *cmd_install_dependencies
+      - *cmd_download_cc_test_reporter
       - *cmd_save_cache
       - *cmd_wait_for_db
-      - *cmd_download_cc_test_reporter
       - run:
           name: Run tests
           command: |
@@ -90,19 +99,19 @@ jobs:
             /tmp/cc-test-reporter format-coverage coverage.xml -t "coverage.py" -o "tmp/cc.testreport.json"
 
       - persist_to_workspace:
-          root: tmp-dir
+          root: tmp
           paths:
             - cc.testreport.json
 
-  upload_coverage:
+  coverage:
     <<: *defaults
     steps:
       - *cmd_download_cc_test_reporter
       - *cmd_attach_workspace
       - run:
-        name: Upload coverage results to Code Climate
-        command: |
-          /tmp/cc-test-reporter upload-coverage -i tmp/cc.testreport.json
+          name: Upload coverage results to Code Climate
+          command: |
+            /tmp/cc-test-reporter upload-coverage -i tmp/cc.testreport.json
 
       - store_artifacts:
           path: test-reports
@@ -113,7 +122,7 @@ workflows:
   version: 2
   build:
     jobs:
-      - build_and_run_test
-      - upload_coverage:
+      - test
+      - coverage:
           requires:
-            - build_and_run_test
+            - test

@@ -1,4 +1,7 @@
 ## Airtech-API
+[![CircleCI](https://circleci.com/gh/veeqtor/Airtech-API/tree/develop.svg?style=svg)](https://circleci.com/gh/veeqtor/Airtech-API/tree/develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/1f1da50d64b4e4a531ae/maintainability)](https://codeclimate.com/github/veeqtor/Airtech-API/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/1f1da50d64b4e4a531ae/test_coverage)](https://codeclimate.com/github/veeqtor/Airtech-API/test_coverage)
 
 
 ## Description
