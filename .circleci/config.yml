@@ -1,0 +1,119 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+
+default: &defaults
+  docker:
+    # specify the version you desire here
+    # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+    - image: circleci/python:3.7.0
+      environment:
+        CC_TEST_REPORTER_ID: ${CC_TEST_REPORTER_ID}
+        SECRET_KEY: ${SECRET_KEY}
+        DB_NAME: ${DB_NAME}
+        DB_PASS: ${DB_PASS}
+        DB_HOST: ${DB_HOST}
+        DB_USER: ${DB_USER}
+
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    - image: circleci/postgres:9.6.2
+      environment:
+        POSTGRES_USER: root
+        POSTGRES_DB: airtech_api_db
+        POSTGRES_PASSWORD: ${DB_PASS}
+
+  #specify working directory
+  working_directory: ~/airtech-api
+
+
+cmd_install_dependencies: &cmd_install_dependencies
+  run:
+    name: Install dependencies
+    command: |
+      sudo pip install pipenv
+      pipenv sync --dev
+
+
+wait_for_db: &cmd_wait_for_db
+  run:
+    name: Waiting for Postgres to be ready
+    command: |
+      dockerize -wait tcp://localhost:5432 -timeout 1m
+
+
+download_cc_test_reporter: &cmd_download_cc_test_reporter
+  run:
+    name: Download cc-test-reporter
+    command: |
+      mkdir -p tmp/
+      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /tmp/cc-test-reporter
+      chmod +x /tmp/cc-test-reporter
+
+
+save_cache: &cmd_save_cache
+  save_cache:
+    key: v1-dependencies-{{ checksum "Pipfile.lock" }}
+    paths:
+      - "/usr/local/bin"
+      - "/usr/local/lib/python3.7/site-packages"
+
+restore_cache: &cmd_restore_cache
+  restore_cache:
+    keys:
+      - v1-dependencies-{{ checksum "Pipfile.lock" }}
+      # fallback to using the latest cache if no exact match is found
+      - v1-dependencies-
+
+attach_workspace: &cmd_attach_workspace
+  attach_workspace:
+    at: ~/airtech-api/tmp
+
+version: 2
+jobs:
+  build_and_run_test:
+    <<: *defaults
+    steps:
+      - checkout
+      - *cmd_attach_workspace
+      - *cmd_restore_cache
+      - *cmd_install_dependencies
+      - *cmd_save_cache
+      - *cmd_wait_for_db
+      - *cmd_download_cc_test_reporter
+      - run:
+          name: Run tests
+          command: |
+            pipenv run pytest
+            /tmp/cc-test-reporter format-coverage coverage.xml -t "coverage.py" -o "tmp/cc.testreport.json"
+
+      - persist_to_workspace:
+          root: tmp-dir
+          paths:
+            - cc.testreport.json
+
+  upload_coverage:
+    <<: *defaults
+    steps:
+      - *cmd_download_cc_test_reporter
+      - *cmd_attach_workspace
+      - run:
+        name: Upload coverage results to Code Climate
+        command: |
+          /tmp/cc-test-reporter upload-coverage -i tmp/cc.testreport.json
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_and_run_test
+      - upload_coverage:
+          requires:
+            - build_and_run_test
