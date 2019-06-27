@@ -1,7 +1,6 @@
 """Booking models"""
 
 from django.db import models
-from datetime import datetime, date
 
 from src.apps.core.models import BaseAuditableModel
 from src.apps.user.models import User
@@ -47,28 +46,12 @@ class Ticket(BaseAuditableModel):
     flight = models.ForeignKey(Flight,
                                related_name='ticket',
                                on_delete=models.CASCADE)
-    take_off = models.CharField(_('Take off'), max_length=100, null=True)
-    destination = models.CharField(_('Destination'), max_length=100, null=True)
     seat_number = models.CharField(_('Seat number'), max_length=100)
     type = models.CharField(_('Type'), max_length=100, choices=Seats.TYPE)
-    date = models.DateField(_('Date'))
-    departure_time = models.TimeField(_('Departure Time'))
-    arrival_time = models.TimeField(_('Arrival Time'))
     made_by = models.ForeignKey(User,
                                 related_name='ticket',
                                 on_delete=models.CASCADE)
     date_made = models.DateTimeField(_('Date made'), auto_now_add=True)
-
-    @property
-    def flight_duration(self):
-        """
-        Flight duration.
-        """
-
-        duration = datetime.combine(date.min,
-                                    self.arrival_time) - datetime.combine(
-                                        date.min, self.departure_time)
-        return duration
 
     def __str__(self):
         return f'{self.ticket_ref} - {self.seat_number}'

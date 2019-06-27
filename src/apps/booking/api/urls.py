@@ -1,13 +1,10 @@
 """Module for the bookings urls."""
 
-from django.urls import path, include
 from rest_framework.routers import SimpleRouter
-from src.apps.booking.api.views import ReservationsView, TicketView
+from src.apps.booking.api.views import ReservationsViewSet, TicketViewSet
 
 router = SimpleRouter()
-router.register(r'', ReservationsView, basename='reservation')
+router.register(r'reserve', ReservationsViewSet, basename='reservation')
+router.register(r'ticket', TicketViewSet, basename='ticket')
 
-urlpatterns = [
-    path('reserve/', include(router.urls), name='reservation'),
-    path('ticket/', TicketView.as_view(), name='ticket'),
-]
+urlpatterns = router.urls

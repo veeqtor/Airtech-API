@@ -27,12 +27,7 @@ class TestTicketModel:
         assert ticket.seat_number is not None
         assert ticket.made_by is not None
         assert ticket.date_made is not None
-        assert ticket.flight_duration is not None
         assert ticket.ticket_ref == NEW_TICKET[0]['ticket_ref']
-        assert ticket.destination == NEW_TICKET[0]['destination']
-        assert ticket.arrival_time == NEW_TICKET[0]['arrival_time']
-        assert ticket.departure_time == NEW_TICKET[0]['departure_time']
-        assert ticket.take_off == NEW_TICKET[0]['take_off']
 
     def test_ticket_deletion_succeeds(self, add_tickets):
         """

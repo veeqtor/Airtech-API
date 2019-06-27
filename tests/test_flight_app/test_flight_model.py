@@ -30,7 +30,7 @@ class TestFlightModel:
         assert flight.date is not None
         assert flight.departure_time == NEW_FLIGHT['departure_time']
         assert flight.arrival_time == NEW_FLIGHT['arrival_time']
-        assert flight.flight_duration == DURATION
+        assert flight.flight_duration == str(DURATION)
         assert flight.plane is not None
 
     def test_flight_deletion_succeeds(self, add_flights):

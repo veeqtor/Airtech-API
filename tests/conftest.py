@@ -192,23 +192,15 @@ def add_tickets(create_user, add_flights):
         "ticket_ref": "LOS29203SLC",
         "paid": False,
         "flight": add_flights[0],
-        "take_off": "LOS",
-        "destination": "SLC",
+        "type": "ECO",
         "seat_number": "E001",
-        "date": date.today() + timedelta(days=5),
-        "departure_time": datetime.time(10, 10),
-        "arrival_time": datetime.time(22, 15),
         "made_by": user,
     }, {
         "ticket_ref": "LOS24933SLC",
         "paid": False,
         "flight": add_flights[1],
-        "take_off": "SLC",
-        "destination": "LOS",
+        "type": "ECO",
         "seat_number": "E001",
-        "date": date.today() + timedelta(days=5),
-        "departure_time": datetime.time(8, 10),
-        "arrival_time": datetime.time(11, 15),
         "made_by": user
     }]
 

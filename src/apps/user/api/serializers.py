@@ -2,12 +2,12 @@
 
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
+from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
-
 from src.apps.core.utilities.validations import (password_validation,
                                                  email_validation)
+from src.apps.user_profile.api.serializers import UserProfileSerializer
 from src.apps.core.utilities.messages import ERRORS
-from rest_framework_jwt.settings import api_settings
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -97,3 +97,14 @@ class AuthTokenSerializer(JSONWebTokenSerializer):
         else:
             raise serializers.ValidationError(ERRORS['USR_06'],
                                               code='authentication')
+
+
+class UserFullNameSerializer(UserSerializer):
+    """Serializer class for user's details"""
+
+    user_profile = UserProfileSerializer(read_only=True)
+
+    class Meta(UserSerializer.Meta):
+        """Meta class"""
+
+        fields = ['id', 'email', 'user_profile']
