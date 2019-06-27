@@ -7,6 +7,7 @@ from rest_framework import generics, status, mixins, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from src.apps.core.views import BaseModelViewSet
 from src.apps.core.utilities.response_utils import ResponseHandler
 from src.apps.core.utilities.messages import MESSAGES
 from src.apps.booking.models import (Reservation, Ticket)
@@ -15,22 +16,12 @@ from src.apps.booking.api.serializers import (ReservationSerializer,
                                               TicketSerializer)
 
 
-class ReservationsView(mixins.CreateModelMixin, mixins.ListModelMixin,
-                       mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class ReservationsView(BaseModelViewSet):
     """
     View set for Reservations.
     """
     serializer_class = ReservationSerializer
     permission_classes = [IsAuthenticated]
-
-    def list(self, request, *args, **kwargs):
-        """Method to list reservations made."""
-
-        queryset = self.filter_queryset(self.get_queryset())
-
-        serializer = self.get_serializer(queryset, many=True)
-        res = ResponseHandler.response(serializer.data)
-        return Response(res)
 
     def create(self, request, *args, **kwargs):
         """Method to create a ticket."""
@@ -177,14 +168,6 @@ class ReservationsView(mixins.CreateModelMixin, mixins.ListModelMixin,
         res = ResponseHandler.response(data=MESSAGES['RESERVE_CANCEL'].format(
             instance.flight.flight_number))
         return Response(res)
-
-    def get_object(self):
-        """
-        Default get objects.
-        """
-        query_set = self.get_queryset()
-        obj = generics.get_object_or_404(query_set, **self.kwargs)
-        return obj
 
     def get_queryset(self):
         """
