@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 from src.apps.core import views
 
 BASE_VERSION = 'v1/'
@@ -30,4 +33,4 @@ urlpatterns = [
     path(
         f'{BASE_VERSION}bookings/',
         include(('src.apps.booking.api.urls', 'booking'), namespace='booking'))
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
