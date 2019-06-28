@@ -16,6 +16,7 @@ pytest-django = "*"
 pytest-cov = "*"
 djangorestframework-jwt = "*"
 djangorestframework-camel-case = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"

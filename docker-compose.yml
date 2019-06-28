@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  api:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile
+
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - HOST_ENV=${HOST_ENV}
+      - DB_NAME=airtech_v1
+      - DB_PASS=airtech_v1_flashy
+      - DB_HOST=database
+      - DB_USER=docker-user
+
+    volumes:
+      - .:/airtech
+
+    ports:
+      - "9000:9000"
+
+    depends_on:
+      - database
+
+    stdin_open: true
+    tty: true
+
+  database:
+    restart: on-failure
+    image: postgres:10.5-alpine
+
+    environment:
+      - POSTGRES_USER=docker-user
+      - POSTGRES_PASSWORD=airtech_v1_flashy
+      - POSTGRES_DB=airtech_v1
+
+    volumes:
+      - tmp-docker_db:/var/lib/postgresql/data
+
+    ports:
+      - '5433:5432'
+
+volumes:
+  tmp-docker_db:
