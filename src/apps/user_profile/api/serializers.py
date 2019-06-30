@@ -41,6 +41,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'first_name',
             'middle_name',
             'last_name',
+            'photo_url',
             'gender',
             'phone',
             'dob',

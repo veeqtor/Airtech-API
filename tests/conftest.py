@@ -4,6 +4,10 @@ import datetime
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
+from django.utils.six import BytesIO, StringIO
+from PIL import Image
+
 from rest_framework_jwt.settings import api_settings
 
 from src.apps.user_profile.models import Passport
@@ -205,3 +209,32 @@ def add_tickets(create_user, add_flights):
     }]
 
     return [Ticket.objects.create(**ticket) for ticket in tickets]
+
+
+@pytest.fixture(scope='function')
+def create_image():
+    """Fixture to create image"""
+
+    def create_image(storage,
+                     filename,
+                     size=(100, 100),
+                     image_mode='RGB',
+                     image_format='png'):
+        """
+        References: http://blog.cynthiakiser.com/blog/2016/06/26/testing-file
+        -uploads-in-django/
+        Generate a test image, returning the filename
+        that it was saved as.
+
+        If ``storage`` is ``None``, the BytesIO containing the image data
+        will be passed instead.
+        """
+        data = BytesIO()
+        Image.new(image_mode, size).save(data, image_format)
+        data.seek(0)
+        if not storage:
+            return data
+        image_file = ContentFile(data.read())
+        return storage.save(filename, image_file)
+
+    return create_image

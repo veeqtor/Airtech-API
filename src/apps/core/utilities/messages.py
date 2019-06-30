@@ -20,7 +20,10 @@ MESSAGES = {
     'You have successfully cancelled your reservation ',
     'TICKET_CANCEL':
     'You have successfully cancelled your ticket '
-    'for flight {}.'
+    'for flight {}.',
+    'PHOTO_UPLOAD':
+    'Your request is being processed, You will receive an '
+    'email shortly',
 }
 
 ERRORS = {
@@ -30,7 +33,7 @@ ERRORS = {
     'Password must be alphanumeric and must contain at least '
     'one special character.',
     'USR_O3':
-    'There is a problem with the values provided.',
+    'There is a problem with the fields provided.',
     'USR_04':
     'This field is required.',
     'USR_05':
@@ -41,6 +44,10 @@ ERRORS = {
     'This field may not be blank.',
     'USR_09':
     'Sorry, We could not find what you are looking for.',
+    'USR_10':
+    'Image file must not exceed 2Mb.',
+    'USR_11':
+    'File is not an image.',
     'AUTH_01':
     'Authentication credentials were not provided.',
     'AUTH_02':
@@ -48,11 +55,23 @@ ERRORS = {
     'CUST_01':
     '{} with this {} already exists.',
     'FLI_01':
-    'There is a problem with the values provided, either '
+    'There is a problem with the fields provided, either '
     'the flight is not available or the seat has already '
     'been booked/reserved.',
     'FLI_02':
     'Sorry but you cannot modify/cancel your reservation/booking '
     f'{settings.FLIGHT_EDIT_ALLOWANCE_DAYS} days before the '
     'flight date.'
+}
+
+FILE_ERRORS = {
+    'FILE_01': {
+        'photo': [ERRORS['USR_04']]
+    },
+    'FILE_02': {
+        'photo': [ERRORS['USR_10']]
+    },
+    'FILE_03': {
+        'photo': [ERRORS['USR_11']]
+    }
 }

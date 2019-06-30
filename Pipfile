@@ -17,6 +17,10 @@ pytest-cov = "*"
 djangorestframework-jwt = "*"
 djangorestframework-camel-case = "*"
 gunicorn = "*"
+cloudinary = "*"
+celery = "*"
+redis = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"
