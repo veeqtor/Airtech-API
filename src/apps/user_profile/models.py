@@ -1,9 +1,9 @@
 """User Profile"""
 
 from django.db import models
-from src.apps.core.models import BaseAuditableModel
 from django.utils.translation import gettext_lazy as _
 
+from src.apps.core.models import BaseAuditableModel
 from src.apps.user.models import User
 
 
@@ -43,6 +43,21 @@ class UserProfile(BaseAuditableModel):
     phone = models.CharField(
         _('Phone number'),
         null=True,
+        max_length=100,
+    )
+
+    photo_url = models.CharField(
+        _('Passport photograph'),
+        null=False,
+        default='https://res.cloudinary.com/veeqtor/image/upload/v1561820733/'
+        'airtech/user_photo_placeholder.png',
+        max_length=255,
+    )
+
+    photo_public_id = models.CharField(
+        _('Passport public id'),
+        null=False,
+        default='iowjgoirgoierhgio934843897986798',
         max_length=100,
     )
 

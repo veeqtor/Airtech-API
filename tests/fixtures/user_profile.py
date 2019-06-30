@@ -17,3 +17,8 @@ INVALID_PROFILE = {
     "phone": "",
     "seat_preference": "Window",
 }
+
+MOCK_RESPONSE = {
+    'public_id': 'public-id',
+    'secure_url': 'http://test_response.com/test_image.png',
+}

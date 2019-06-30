@@ -7,7 +7,7 @@ BOLD=`tput bold`
 
 database_setups(){
     python manage.py checkDB
-    python manage.py migrate
+    python manage.py migrate --run-syncdb
     python manage.py collectstatic --noinput
     sleep 2
 }
@@ -15,6 +15,12 @@ database_setups(){
 
 API_startup() {
 
+    # Celery
+    celery worker -A src.celery --loglevel=info --concurrency=4 &
+    sleep 5
+
+    # Start server
+    echo -e "\n \n"
     gunicorn --access-logfile '-' \
         --workers 2 --timeout 3600 \
         src.wsgi:application --bind 0.0.0.0:9000 --reload \
@@ -25,13 +31,13 @@ main() {
 
     # Set up the database
     echo -e "\n \n"
-    echo $YELLOW$BOLD"==========[ Setting up the database. ]=========="
+    echo $YELLOW$BOLD"==========[ Database ]=========="
     database_setups
     sleep 2
 
     # Start server
     echo -e "\n \n"
-    echo $GREEN$BOLD"==========[ Starting the server ]=========="
+    echo $GREEN$BOLD"==========[ Server ]=========="
     API_startup
 }
 

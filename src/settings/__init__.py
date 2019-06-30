@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Third Party apps
     'rest_framework',
     'corsheaders',
+    'cloudinary',
 
     # Apps
     'src.apps.core.apps.CoreConfig',
@@ -146,6 +147,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, '../templates/static')]
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 MEDIA_URL = '/media/'
 
+FILE_UPLOAD_TEMP_DIR = os.path.join(MEDIA_ROOT, 'img')
+FILE_UPLOAD_HANDLERS = [
+    'django.core.files.uploadhandler.'
+    'TemporaryFileUploadHandler'
+]
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -213,3 +220,18 @@ JWT_AUTH = {
 
 # Number of days users are allowed to modify their booking or reservations
 FLIGHT_EDIT_ALLOWANCE_DAYS = 5
+
+# Cloudinary credentials
+CLOUDINARY = {
+    'cloud_name': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'api_key': os.environ.get('CLOUDINARY_API_KEY'),
+    'api_secret': os.environ.get('CLOUDINARY_API_SECRET')
+}
+
+# REDIS related settings
+REDIS_HOST = os.environ.get('REDIS_HOST')
+REDIS_PORT = os.environ.get('REDIS_PORT')
+BROKER_URL_DEV = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_URL = os.getenv('REDIS_URL', BROKER_URL_DEV)
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = BROKER_URL

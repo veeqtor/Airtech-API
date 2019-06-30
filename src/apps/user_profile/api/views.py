@@ -1,7 +1,8 @@
 """API View module for users"""
 
-from rest_framework import generics
+from rest_framework import generics, views
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -9,6 +10,7 @@ from src.apps.core.views import BaseModelViewSet
 from src.apps.core.utilities.response_utils import ResponseHandler
 from src.apps.user_profile.api.serializers import (UserProfileSerializer,
                                                    PassportSerializer)
+from src.tasks.file_uploads import FileUpload
 
 
 class UserProfileUpdate(generics.RetrieveUpdateAPIView):
@@ -40,7 +42,9 @@ class UserProfileUpdate(generics.RetrieveUpdateAPIView):
             response = ResponseHandler.response(serializer.data)
             return Response(response)
 
-        error = ResponseHandler.response(serializer.errors, status='error')
+        error = ResponseHandler.response(serializer.errors,
+                                         key='USR_O3',
+                                         status='error')
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
@@ -75,3 +79,30 @@ class PassportViewSet(BaseModelViewSet):
 
         user = self.request.user
         return user.user_profile.passports.filter(deleted=False)
+
+
+class ImageUpload(views.APIView):
+    """Passport photograph upload."""
+
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
+
+    def put(self, request, *args, **kwargs):
+        """Put method to upload passport."""
+
+        file_obj = request.FILES.get('photo', None)
+
+        user_profile_qs = self.get_queryset()
+
+        FileUpload.image(file_obj, user_profile_qs)
+
+        response = ResponseHandler.response(data=[], key='PHOTO_UPLOAD')
+        return Response(response)
+
+    def get_queryset(self):
+        """
+        Default query set.
+        """
+
+        user = self.request.user
+        return user.user_profile

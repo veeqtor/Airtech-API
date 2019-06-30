@@ -1,5 +1,8 @@
 """Module to handle all responses"""
 
+from rest_framework.serializers import ValidationError
+from rest_framework import status
+
 from src.apps.core.utilities.messages import ERRORS, MESSAGES
 
 
@@ -8,8 +11,8 @@ class ResponseHandler(object):
     Class that handles all API responses.
     """
 
-    @staticmethod
-    def response(data, key=None, status='success') -> dict:
+    @classmethod
+    def response(cls, data, key=None, status='success') -> dict:
         """
         Response helper for response messages.
         Args:
@@ -37,3 +40,19 @@ class ResponseHandler(object):
             'user_message': MESSAGES[key],
             'data': data
         }
+
+    @classmethod
+    def raise_error(cls, data):
+        """
+        Helper to raise validation errors.
+        Args:
+            data (dict or list): Data to return to user:
+
+        Raises:
+            JSON: The error response
+        """
+
+        error_message = cls.response(data, key='USR_O3', status='error')
+        exception = ValidationError(error_message)
+        exception.status_code = status.HTTP_400_BAD_REQUEST
+        raise exception
