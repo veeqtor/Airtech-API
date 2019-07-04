@@ -64,7 +64,7 @@ class BaseModelViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         """
         Base retrieve method.
-		"""
+        """
 
         instance = self.get_object()
         serializer = self.get_serializer(instance)

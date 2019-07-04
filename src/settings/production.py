@@ -11,3 +11,4 @@ if HOST_ENV in ENV:
 
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = False
+    SSL_ENABLED = False
