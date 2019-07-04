@@ -27,7 +27,7 @@ def send(subject, to, content, from_email=None, bcc=None):
         from_email,
         [to],
         bcc,
-        reply_to=['victor.nwokeocha@andela.com'],
+        reply_to=['support@airtech-v.herokuapp.com'],
         headers={'Message-ID': 'Important'},
     )
     email.attach_alternative(content, "text/html")
