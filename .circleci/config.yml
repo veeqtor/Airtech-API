@@ -132,7 +132,7 @@ jobs:
             curl https://cli-assets.heroku.com/install.sh | sh
 
             # login to heroku docker registry
-            # heroku container:login
+            heroku container:login
 
             # Login to heroku registry
             docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
