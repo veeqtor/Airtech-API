@@ -110,3 +110,4 @@ redis-stable
 redis.sh
 celery-fix.sh
 static/
+staticfiles/
