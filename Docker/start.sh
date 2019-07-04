@@ -23,7 +23,7 @@ API_startup() {
     echo -e "\n \n"
     gunicorn --access-logfile '-' \
         --workers 2 --timeout 3600 \
-        src.wsgi:application --bind 0.0.0.0:9000 --reload \
+        src.wsgi:application --bind 0.0.0.0:$PORT --reload \
         --access-logformat "%(h)s %(u)s %(t)s '%(r)s' %(s)s '%(f)s' '%(a)s'"
 }
 
