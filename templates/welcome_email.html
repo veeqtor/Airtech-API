@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block content %}
+    <table border="0" align="center" cellpadding="0"
+           cellspacing="0" style="margin: 0 25px">
+        <tr>
+            <td>
+                <h2>Welcome {{ display_name }}</h2>
+                <h3>Nice to meet you!</h3>
+                <p>Airtech is an easy and simple platform to find and
+                    make flight bookings and reservations.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Before you proceed to making bookings and reservations,
+                    take out time to complete your profile, doing so will
+                    simplify the booking process.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="padding: 25px 0; color: #ffffff">
+                <a class="btn"
+                   href="{{ request.build_absolute_uri }}v1/users/profile/">Click to
+                    complete your profile.</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    Thanks one again for deciding to join us.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Warmly,</p>
+                <p style="font-family: 'Homemade Apple', cursive;">Nwokeocha
+                    Victor.
+                </p>
+                <small>Founder and President.</small>
+            </td>
+        </tr>
+
+    </table>
+{% endblock content %}

@@ -235,3 +235,12 @@ BROKER_URL_DEV = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 BROKER_URL = os.getenv('REDIS_URL', BROKER_URL_DEV)
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = BROKER_URL
+
+# Email configs
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
+
+SSL_ENABLED = False

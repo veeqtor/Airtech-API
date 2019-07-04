@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from src.tasks.user_emails import UserEmails
 from src.apps.core.views import BaseModelViewSet
 from src.apps.core.utilities.response_utils import ResponseHandler
 from src.apps.core.utilities.messages import MESSAGES
@@ -62,6 +63,9 @@ class ReservationsViewSet(BaseModelViewSet):
                 if reservation_saved:
                     available_seat.reserved = True
                     available_seat.save()
+                    UserEmails.reservation_email(request.user.id,
+                                                 reservation_saved,
+                                                 context=request)
 
                     res = ResponseHandler.response(
                         data=MESSAGES['RESERVED'].format(

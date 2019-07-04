@@ -3,6 +3,7 @@
 import pytest
 from datetime import date, timedelta
 from django.urls import resolve, reverse
+from django.core import mail
 
 from src.apps.core.utilities.messages import ERRORS, MESSAGES
 
@@ -38,8 +39,10 @@ class TestReservationView:
                                content_type='application/json',
                                **auth_header)
         resp_data = response.data
+        email = mail.outbox[1]
         data = resp_data['data']
         assert response.status_code == 200
+        assert email.subject == 'Reservation'
         assert resp_data['status'] == 'success'
         assert data == MESSAGES['RESERVED'].format(seats[0].seat_number,
                                                    flight.flight_number)
