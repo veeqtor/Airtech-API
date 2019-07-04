@@ -19,3 +19,4 @@ class UserConfig(AppConfig):
         user = get_user_model()
 
         post_save.connect(UserProfileSignals.create_profile, sender=user)
+        post_save.connect(UserProfileSignals.welcome_email, sender=user)

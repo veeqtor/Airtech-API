@@ -1,33 +1,51 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Welcome | Airtech</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round"
+          rel="stylesheet"/>
     <style>
-      body {
-        font-family: "Varela Round", sans-serif;
-      }
-      .home {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 100vh;
-        align-items: center;
-        letter-spacing: 0.2rem;
-      }
-    </style>
-  </head>
+        body {
+            font-family: "Varela Round", sans-serif;
+        }
 
-  <body>
-    <div class="home">
-      <h1>Airtech</h1>
-        <code>
-            {{ request.build_absolute_uri }}
-        </code>
-    </div>
-  </body>
+        .home {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: center;
+            letter-spacing: 0.2rem;
+        }
+
+        .btn {
+            margin: 2rem 0;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: small;
+            color: #fff;
+            padding: 0.725rem;
+            background: #204789;
+        }
+
+        .btn:hover {
+            background: #204789de;
+        }
+    </style>
+</head>
+
+<body>
+<div class="home">
+    <img src="{% static "/airtech_logo.jpg" %}" alt="Airtech" width="300"/>
+    <a class="btn"
+       href="{{ request.build_absolute_uri }}v1/doc">View Documentation</a>
+</div>
+</body>
 </html>

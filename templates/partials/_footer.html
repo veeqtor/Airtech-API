@@ -1,0 +1,44 @@
+{% load filters %}
+
+<!-- Footer -->
+<tr>
+    <td bgcolor="#FAFAFA" style="padding: 10px 0 10px 0;">
+        <table border="0" align="center" cellpadding="0"
+               cellspacing="0" style="color: #616161b5">
+            <tr>
+                <td align="center">
+                    <p style="margin: 0; font-size: 10px;">
+                        You received this email because you are
+                        a registered member of
+                        {{ request.get_host }}.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding: 20px 0;">
+                    <img src="{% full_url request "/logo_black.png" %}"
+                         alt="Airtech" width="120"/>
+                    <p style="margin: 5px 0; font-size: 11px;">
+                        Airtech Inc. Lagos Nigeria
+                    </p>
+                    <p style="margin: 5px 0; font-size: 11px;">
+                        210/F Dribble Complex, by anker bay,
+                        Lake Owen, Lagos
+                    </p>
+                    <p style="margin: 5px 0; font-size:
+                                    11px;">
+                        Tel: +123 8474 229
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <p style="margin: 0; font-size: 9px;">
+                        Copyright &copy; 2019 Airtech Inc. N.G,
+                        All rights reserved.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

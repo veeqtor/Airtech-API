@@ -5,5 +5,9 @@ from . import *  # noqa: F403, F401
 
 LOGGING = {}
 DEBUG = False
+
 # Celery related
 CELERY_ALWAYS_EAGER = True
+
+# Email backends
+EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
