@@ -25,6 +25,7 @@ django-redis-cache = "*"
 whitenoise = "*"
 psycopg2-binary = "*"
 yapf = "*"
+locustio = "*"
 
 [requires]
 python_version = "3.7"
