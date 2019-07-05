@@ -12,7 +12,7 @@ users can make flight reservations and buy flight tickets.
 The API documentation can be found here: 
 [Doc](https://documenter.getpostman.com/view/5828093/S1a1bUm1?version=latest)
 
-Staging Link: N/A
+Staging Link: [Staging Link](https://airtech-v.herokuapp.com/)
 
 
 ## Key Application features
