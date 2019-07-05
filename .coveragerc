@@ -9,3 +9,4 @@ omit =
   manage.py,
   *wsgi.py,
   *checkDB.py,
+  locustfile.py,

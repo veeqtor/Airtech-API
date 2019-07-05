@@ -28,6 +28,7 @@ services:
 
     ports:
       - "9000:9000"
+      - "8089:8089"
 
     depends_on:
       - database
