@@ -92,3 +92,12 @@ class FlightWithPlaneSerializer(FlightSerializer):
     """Class representing the flight serializer"""
 
     plane = PlaneModelSerializer()
+
+
+class StatusSerializer(FlightSerializer):
+    """Class for status serializer"""
+
+    class Meta(FlightSerializer.Meta):
+        """Meta"""
+
+        fields = ('status', )
