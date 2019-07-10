@@ -11,7 +11,8 @@ from src.apps.flight.api.serializers import (
     PlaneSerializer,  # noqa: F401
     AvailableSeatsSerializer,
     FlightWithPlaneSerializer,
-    FlightSerializer)
+    FlightSerializer,
+    StatusSerializer)
 
 
 class FlightViewSet(BaseModelViewSet):
@@ -47,13 +48,23 @@ class FlightViewSet(BaseModelViewSet):
         res = ResponseHandler.response(serializer.data)
         return Response(res)
 
+    @action(detail=True)
+    def status(self, request, *args, **kwargs):  # noqa: F401
+        """
+        Get status seats for a particular flight.
+        """
+        instance = self.get_object()
+        serializer = StatusSerializer(instance)
+        res = ResponseHandler.response(serializer.data)
+        return Response(res)
+
     def get_queryset(self):
         """
         Default get query set
         """
 
         qs = Flight.objects.filter(plane__grounded=False,
-                                   deleted=False)\
+                                   deleted=False) \
             .select_related('plane').prefetch_related('plane__seats')
 
         return qs
@@ -73,7 +84,9 @@ class FlightViewSet(BaseModelViewSet):
         Custom permission
         """
 
-        if self.action in ('list', 'retrieve', 'available_seats'):
+        actions = ('list', 'retrieve', 'available_seats', 'status')
+
+        if self.action in actions:
             self.permission_classes = [IsAuthenticated]
 
         return super(self.__class__, self).get_permissions()

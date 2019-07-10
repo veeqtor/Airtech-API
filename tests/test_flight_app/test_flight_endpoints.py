@@ -75,6 +75,20 @@ class TestFlightView:
         assert isinstance(data, list)
         assert data[0]['seat_number'] is not None
 
+    def test_getting_a_flight_status_succeeds(self, client, auth_header,
+                                              add_flights):
+        """Test getting a flight status"""
+
+        flight = add_flights[0]
+        flight_status_url = 'flight:flight-status'
+        flight_url = reverse(flight_status_url, args=[flight.id])
+        response = client.get(flight_url, **auth_header)
+        resp_data = response.data
+        data = resp_data['data']
+        assert response.status_code == 200
+        assert resp_data['status'] == 'success'
+        assert data['status'] == 'Pending'
+
     def test_getting_a_flights_without_auth_fails(self, client, add_flights):
         """Test getting a flights fails"""
 

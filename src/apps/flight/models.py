@@ -56,6 +56,12 @@ class Plane(BaseAuditableModel):
 class Flight(BaseAuditableModel):
     """Model representing the Flight table"""
 
+    STATUS = (
+        ('Pending', 'Pending'),
+        ('Departed', 'Departed'),
+        ('Ready', 'Ready to leave'),
+    )
+
     plane = models.ForeignKey(Plane,
                               related_name="flight",
                               on_delete=models.CASCADE)
@@ -66,6 +72,10 @@ class Flight(BaseAuditableModel):
                                      null=False)
     price = models.DecimalField(_('Price'), max_digits=11, decimal_places=2)
     take_off = models.CharField(_('Take off'), max_length=100, null=False)
+    status = models.CharField(_('Status'),
+                              max_length=100,
+                              choices=STATUS,
+                              default='Pending')
     destination = models.CharField(_('Destination'),
                                    max_length=100,
                                    null=False)
