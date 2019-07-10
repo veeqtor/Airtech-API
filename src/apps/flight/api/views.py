@@ -1,11 +1,12 @@
 """API View module for flights"""
-
+from django.db import connection
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from src.apps.core.views import BaseModelViewSet
 from src.apps.core.utilities.response_utils import ResponseHandler
+from src.apps.core.utilities.validations import date_validator
 from src.apps.flight.models import (Plane, Flight)  # noqa: F401
 from src.apps.flight.api.serializers import (
     PlaneSerializer,  # noqa: F401
@@ -56,6 +57,40 @@ class FlightViewSet(BaseModelViewSet):
         instance = self.get_object()
         serializer = StatusSerializer(instance)
         res = ResponseHandler.response(serializer.data)
+        return Response(res)
+
+    def reservation_count_query(self, pk, date):
+        """query to get the reservation count."""
+
+        query = "SELECT COUNT(*) AS reservation_count " \
+                "FROM bo_reservations WHERE bo_reservations.flight_id = " \
+                "(SELECT fl_flights.id FROM fl_flights " \
+                "INNER JOIN fl_planes " \
+                "ON (fl_flights.plane_id = fl_planes.id) " \
+                "WHERE (fl_flights.deleted = false " \
+                "AND fl_planes.grounded = false " \
+                "AND fl_flights.id = %s " \
+                "AND fl_flights.date = %s));"
+
+        with connection.cursor() as cursor:
+            cursor.execute(query, [pk, str(date)])
+            row = cursor.fetchone()
+
+        return row
+
+    @action(detail=True)
+    def reservations(self, request, *args, **kwargs):  # noqa: F401
+        """
+        Get the total count of the reservations
+        """
+        date = request.query_params.get('date', None)
+        date_obj = date_validator(date)
+        pk = kwargs['pk']
+
+        count = self.reservation_count_query(pk, date_obj)
+
+        res = ResponseHandler.response({'reservations': count[0]})
+
         return Response(res)
 
     def get_queryset(self):

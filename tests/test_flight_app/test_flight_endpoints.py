@@ -5,7 +5,7 @@ from django.urls import resolve, reverse
 
 from src.apps.core.utilities.messages import ERRORS
 from tests.fixtures.flight import NEW_FLIGHT
-from tests.fixtures.user import USER
+from tests.fixtures.user import USER, SUPERUSER
 
 FLIGHT_GET_URL = reverse('flight:flight-list')
 GET_A_FLIGHT_URL = 'flight:flight-detail'
@@ -176,6 +176,74 @@ class TestFlightView:
         assert response.status_code == 400
         assert resp_data['status'] == 'error'
         assert data['flight_number'][0] == ERRORS['USR_07']
+
+    def test_getting_a_flight_reservation_count_succeeds(
+            self, client, create_superuser, generate_token, add_reservations):
+        """Test getting a flight reservations count"""
+
+        user = create_superuser(SUPERUSER)
+        token = generate_token(user)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+
+        flight = add_reservations[0].flight
+        flight_status_url = 'flight:flight-reservations'
+        flight_url = reverse(flight_status_url, args=[flight.id])
+        response = client.get(flight_url, {'date': str(flight.date)},
+                              **auth_header)
+        resp_data = response.data
+        data = resp_data['data']
+        assert response.status_code == 200
+        assert resp_data['status'] == 'success'
+        assert data['reservations'] > 0
+
+    def test_getting_a_flight_reservation_count_with_invalid_date_fails(
+            self, client, create_superuser, generate_token, add_reservations):
+        """Test getting a flight reservations count fails"""
+
+        user = create_superuser(SUPERUSER)
+        token = generate_token(user)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+
+        flight = add_reservations[0].flight
+        flight_status_url = 'flight:flight-reservations'
+        flight_url = reverse(flight_status_url, args=[flight.id])
+        response = client.get(flight_url, {'date': '2019-13-19'},
+                              **auth_header)
+        resp_data = response.data
+        errors = resp_data['errors']
+        assert response.status_code == 400
+        assert resp_data['status'] == 'error'
+        assert errors['date'] == ERRORS['RES_01']
+
+    def test_getting_a_flight_reservation_count_without_date_fails(
+            self, client, create_superuser, generate_token, add_reservations):
+        """Test getting a flight reservations count fails"""
+
+        user = create_superuser(SUPERUSER)
+        token = generate_token(user)
+        auth_header = {'HTTP_AUTHORIZATION': f'Bearer {token}'}
+
+        flight = add_reservations[0].flight
+        flight_status_url = 'flight:flight-reservations'
+        flight_url = reverse(flight_status_url, args=[flight.id])
+        response = client.get(flight_url, **auth_header)
+        resp_data = response.data
+        errors = resp_data['errors']
+        assert response.status_code == 400
+        assert resp_data['status'] == 'error'
+        assert errors['date'] == ERRORS['RES_02']
+
+    def test_only_admin_can_access_endpoint(self, client, auth_header):
+        """Test getting a flight reservations count fails"""
+
+        flight_status_url = 'flight:flight-reservations'
+        flight_url = reverse(flight_status_url, args=['invalid'])
+        response = client.get(flight_url, **auth_header)
+        resp_data = response.data
+
+        assert response.status_code == 403
+        assert resp_data['status'] == 'error'
+        assert resp_data['user_message'] == ERRORS['AUTH_02']
 
     def test_admin_can_update_flights_with_invalid_id_fails(
             self, client, add_planes, create_superuser, generate_token):
