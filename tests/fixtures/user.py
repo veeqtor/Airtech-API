@@ -8,7 +8,7 @@ USER = {
 USER_INVALID = {'email': '', 'password': ''}
 
 SUPERUSER = {
-    'email': 'test_user@example.com',
+    'email': 'test_userII@example.com',
     'password': 'password1234',
 }
 

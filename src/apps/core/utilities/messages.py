@@ -61,7 +61,11 @@ ERRORS = {
     'FLI_02':
     'Sorry but you cannot modify/cancel your reservation/booking '
     f'{settings.FLIGHT_EDIT_ALLOWANCE_DAYS} days before the '
-    'flight date.'
+    'flight date.',
+    'RES_01':
+    'Invalid date format, should be in this format "YYYY-MM-DD".',
+    'RES_02':
+    'Date params is required.',
 }
 
 FILE_ERRORS = {
