@@ -49,6 +49,35 @@ This is a python API built with [**Django v2.2**](https://docs.djangoproject.com
 
 - [**PostgreSQL**](https://www.postgresql.org/)
 
+## Setting up Development With Docker
+
+1. Download Docker from [here](https://docs.docker.com/)
+2. Set up an account to download Docker
+3. Install Docker after download
+4. Go to your terminal run the command `docker login`
+5. Input your Docker email and password
+
+To setup for development with Docker after cloning the repository please do/run the following commands in the order stated below:
+
+-   `cd <project dir>` to check into the dir
+-   `docker-compose build` to build the application images
+-   `docker-compose up` to start the api after the previous command is successful
+
+The `docker-compose build` command builds the docker image where the api and its postgres database would be situated.
+Also this command does the necessary setup that is needed for the API to connect to the database.
+
+The `docker-compose up` command starts the application.
+
+To stop the running containers run the command `docker-compose down`
+To delete the database volume as well run the command `docker-compose down -v`
+
+
+**To Clean Up After using docker do the following**
+
+1. In the `Docker_local` directory, run the command `sh cleanup.sh`
+2. Wait for all images to be deleted.
+
+**URGENT WARNING** PLEASE DO NOT RUN THE CLEAN-UP COMMAND ABOVE UNLESS YOU ARE ABSOLUTELY SURE YOU ARE DONE WITH THAT DEVELOPMENT SESSION AND HAVE NO DATA THAT WOULD BE LOST IF CLEAN-UP IS DONE!
 
 ### Setting up for development
 
