@@ -16,9 +16,8 @@ database_setups(){
 API_startup() {
 
     # Celery
-    celery worker -A src.celery --loglevel=info --concurrency=4 &
-    celery -A src.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler --pidfile=/tmp/celeryd.pid &
-    celery flower -A src.celery --address=0.0.0.0 --port=5555 &
+    celery worker -A src.celery --loglevel=info --concurrency=2 &
+    celery -A src.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler &
     sleep 5
 
     # Start server
