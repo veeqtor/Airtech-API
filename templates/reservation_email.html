@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block content %}
+    <table border="0" align="center" cellpadding="0"
+           cellspacing="0" style="margin: 0 25px">
+        <tr>
+            <td>
+                <h2>Hi {{ reservation.display_name }}</h2>
+                <h3>Your reservation was successful</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table cellpadding="10" cellspacing="0" border="0">
+                    <tr>
+                        <td>
+                            <hr>
+                            <strong>Flight Details</strong>
+                        </td>
+                        <td>
+                            Flight number: <em>{{ reservation.flight_number }}</em><br>
+                            Plane number: <em>{{ reservation.plane }}</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr>
+                            <strong>Seat Info:</strong>
+                        </td>
+                        <td>
+                            Seat Number: <em>{{ reservation.seat_number }}</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr>
+                            <strong>Date Info</strong>
+                        </td>
+                        <td>
+                            Date: <em>{{ reservation.date }}</em><br>
+                            Departure Time: <em>{{ reservation.departure_time }}</em><br>
+                            Arrival Time: <em>
+                            {{ reservation.arrival_time }}</em>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    Best regards,<br>
+                    <small>Airtech Team.</small>
+                </p>
+            </td>
+        </tr>
+    </table>
+{% endblock content %}

@@ -1,0 +1,68 @@
+{
+  "addons": [
+    "heroku-postgresql",
+    "heroku-redis"
+  ],
+  "buildpacks": [
+
+  ],
+  "env": {
+    "CLOUDINARY_API_KEY": {
+      "required": true
+    },
+    "CLOUDINARY_API_SECRET": {
+      "required": true
+    },
+    "CLOUDINARY_CLOUD_NAME": {
+      "required": true
+    },
+    "DB_HOST": {
+      "required": true
+    },
+    "DB_NAME": {
+      "required": true
+    },
+    "DB_PASS": {
+      "required": true
+    },
+    "DB_USER": {
+      "required": true
+    },
+    "DISABLE_COLLECTSTATIC": {
+      "required": true
+    },
+    "EMAIL_HOST": {
+      "required": true
+    },
+    "EMAIL_HOST_PASSWORD": {
+      "required": true
+    },
+    "EMAIL_HOST_USER": {
+      "required": true
+    },
+    "HOST_ENV": {
+      "required": true
+    },
+    "REDIS_HOST": {
+      "required": true
+    },
+    "REDIS_PORT": {
+      "required": true
+    },
+    "REDIS_URL": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "Airtech-API",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}

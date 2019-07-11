@@ -1,0 +1,33 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+yapf = "*"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
+pytest-django = "*"
+pytest-cov = "*"
+djangorestframework-jwt = "*"
+djangorestframework-camel-case = "*"
+gunicorn = "*"
+cloudinary = "*"
+celery = "*"
+redis = "*"
+pillow = "*"
+django-heroku = "*"
+django-redis-cache = "*"
+whitenoise = "*"
+psycopg2-binary = "*"
+yapf = "*"
+locustio = "*"
+flower = "*"
+django-celery-beat = "*"
+
+[requires]
+python_version = "3.7"

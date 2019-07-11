@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+# IDE
+.idea/
+redis-stable
+redis.sh
+celery-fix.sh
+static/
+staticfiles/

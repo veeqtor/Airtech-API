@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block content %}
+    <table border="0" align="center" cellpadding="0"
+           cellspacing="0" style="margin: 0 25px">
+        <tr>
+            <td>
+                <h2>Gentle reminder</h2>
+                <p>You have a flight scheduled for tomorrow {{ date }}
+                </p>
+            </td>
+        <tr>
+            <td>
+                <table cellpadding="10" cellspacing="0" border="0">
+                    <tr>
+                        <td>
+                            <hr>
+                            <strong>Flight Details</strong>
+                        </td>
+                        <td>
+                            Flight number: <em>{{ flight_number }}</em><br>
+                            {% if ticket_ref %}
+                                Ticket ref: <em>{{ ticket_ref }}</em><br>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Warmly,</p>
+                <small>Team Airtech</small>
+            </td>
+        </tr>
+
+    </table>
+{% endblock content %}
