@@ -26,6 +26,8 @@ whitenoise = "*"
 psycopg2-binary = "*"
 yapf = "*"
 locustio = "*"
+flower = "*"
+django-celery-beat = "*"
 
 [requires]
 python_version = "3.7"

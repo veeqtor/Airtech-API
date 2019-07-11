@@ -1,8 +1,8 @@
-"""Module for file upload tasks."""
+"""Module for file upload services."""
 
 from datetime import datetime
 
-from src.services.cloudinary import upload_image
+from src.apps.core.tasks import upload_image
 from src.apps.core.utilities.messages import FILE_ERRORS
 from src.apps.core.utilities.response_utils import ResponseHandler
 

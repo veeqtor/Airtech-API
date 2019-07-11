@@ -1,7 +1,7 @@
 """Signals for user profile"""
 
 from src.apps.user_profile.models import UserProfile
-from src.tasks.user_emails import UserEmails
+from src.services.user_emails import UserEmails
 
 
 class UserProfileSignals(object):

@@ -41,6 +41,7 @@ USER docker-user
 
 # Expose port 9000
 EXPOSE 9000
+EXPOSE 5555
 
 # Run the start script.
 CMD sh Docker/start.sh

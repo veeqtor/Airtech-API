@@ -10,7 +10,7 @@ from src.apps.core.views import BaseModelViewSet
 from src.apps.core.utilities.response_utils import ResponseHandler
 from src.apps.user_profile.api.serializers import (UserProfileSerializer,
                                                    PassportSerializer)
-from src.tasks.file_uploads import FileUpload
+from src.services.file_uploads import FileUpload
 
 
 class UserProfileUpdate(generics.RetrieveUpdateAPIView):

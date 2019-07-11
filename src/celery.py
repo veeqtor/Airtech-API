@@ -12,4 +12,4 @@ celery_app = Celery('src')
 # pickle the object when using Windows.
 settings.DEBUG = True
 celery_app.config_from_object('django.conf:settings')
-celery_app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+celery_app.autodiscover_tasks()

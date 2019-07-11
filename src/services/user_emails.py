@@ -3,7 +3,7 @@
 from django.contrib.auth import get_user_model
 from django.template.loader import get_template
 
-from src.services.email import send
+from src.apps.core.tasks import send
 
 
 class UserEmails:

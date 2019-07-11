@@ -188,6 +188,80 @@ def add_reservations(create_user, add_flights):
 
 
 @pytest.fixture(scope='function')
+def add_due_flights(add_planes):
+    """Fixture to add flights"""
+
+    flights = [{
+        "flight_number": "FLI-0011",
+        "plane": add_planes[0],
+        "take_off": "LOS",
+        "destination": "ATL",
+        "price": 2300.34,
+        "date": date.today() + timedelta(days=1),
+        "departure_time": datetime.time(8, 10),
+        "arrival_time": datetime.time(11, 15),
+    }, {
+        "flight_number": "FLI-0010",
+        "plane": add_planes[1],
+        "take_off": "LOS",
+        "destination": "ATL",
+        "price": 2300.34,
+        "date": date.today() + timedelta(days=1),
+        "departure_time": datetime.time(8, 10),
+        "arrival_time": datetime.time(11, 15),
+    }]
+
+    return [Flight.objects.create(**flight) for flight in flights]
+
+
+@pytest.fixture(scope='function')
+def add_due_reservations(create_user, add_due_flights):
+    """Fixture to add reservations"""
+
+    user = create_user(USER)
+    reservations = [{
+        "flight": add_due_flights[0],
+        "seat_number": "E001",
+        "type": "ECO",
+        "made_by": user,
+    }, {
+        "flight": add_due_flights[1],
+        "seat_number": "E001",
+        "type": "ECO",
+        "made_by": user
+    }]
+
+    return [
+        Reservation.objects.create(**reservation)
+        for reservation in reservations
+    ]
+
+
+@pytest.fixture(scope='function')
+def add_due_tickets(create_user, add_due_flights):
+    """Fixture to add tickets"""
+
+    user = create_user(USER)
+    tickets = [{
+        "ticket_ref": "LOS29203SLC",
+        "paid": False,
+        "flight": add_due_flights[0],
+        "type": "ECO",
+        "seat_number": "E001",
+        "made_by": user,
+    }, {
+        "ticket_ref": "LOS24933SLC",
+        "paid": False,
+        "flight": add_due_flights[1],
+        "type": "ECO",
+        "seat_number": "E001",
+        "made_by": user
+    }]
+
+    return [Ticket.objects.create(**ticket) for ticket in tickets]
+
+
+@pytest.fixture(scope='function')
 def add_tickets(create_user, add_flights):
     """Fixture to add tickets"""
 

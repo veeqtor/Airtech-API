@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from src.tasks.user_emails import UserEmails
+from src.services.user_emails import UserEmails
 from src.apps.core.views import BaseModelViewSet
 from src.apps.core.utilities.response_utils import ResponseHandler
 from src.apps.core.utilities.messages import MESSAGES
