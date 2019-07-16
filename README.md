@@ -174,6 +174,46 @@ NOTE: This setup is for MacOS only, Windows setup will be coming soon.
    To further view the lines not tested or covered if there is any, 
 
    An `htmlcov` directory will be created, get the `index.html` file by entering the directory and view it in your browser.
+   
+
+
+##  Running Celery worker
+
+- **Running Redis server** : if you are not running docker, then you can simply
+ run the command `sh redis.sh` in the root project directory, this will install redis for you (if not already installed) and also run/start the redis server for the first time on your local machine.
+  
+
+  - Update the `.env` with the redis info, this is usually `localhost` and `6379`:
+       ```
+       REDIS_HOST=<redis_host>
+       REDIS_PORT=<redis port>
+      ```
+  
+   - In a new terminal tab run the Celery Message Worker with:
+   
+        ```
+        celery worker -A src.celery -l info --concurrency=2
+        ```
+   
+##  Running Celery beat
+  - After setting up the Celery worker, you need to start the `celery-beat` used to to trigger `celery` scheduled tasks
+  
+  - In a new terminal tab start `celery-beat` with:
+   
+    ```
+    celery -A src.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler --pidfile=/tmp/celeryd.pid
+    ```
+    
+##  Running Celery flower
+  - After setting up the Celery workers and beat, you need to start the 
+  `celery-flower` 
+  used to monitor celery task in realtime.
+  
+  - In a new terminal tab start `celery-flower` with:
+   
+    ```
+    celery flower -A src.celery --address=0.0.0.0 --port=5555
+    ```
 
 
 ## Contribution guide
